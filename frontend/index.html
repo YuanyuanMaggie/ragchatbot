@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Yuanyuan Li - Professional Profile</title>
+    <link rel="stylesheet" href="style.css?v=10">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-text">
+                    <h1>Yuanyuan Li - Professional Profile</h1>
+                    <p class="subtitle">Engineering Leader • Data Platform • Full-Stack Development</p>
+                </div>
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Left Sidebar -->
+            <aside class="sidebar">
+                <!-- New Chat Button -->
+                <div class="sidebar-section">
+                    <button id="newChatButton" class="new-chat-button">+ NEW CHAT</button>
+                </div>
+
+                <!-- Profile Stats -->
+                <div class="sidebar-section">
+                    <details class="stats-collapsible" open>
+                        <summary class="stats-header">Profile Overview</summary>
+                        <div class="course-stats" id="profileStats">
+                            <div class="stat-item">
+                                <span class="stat-label">Profile sections:</span>
+                                <span class="stat-value" id="totalSections">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <div class="profile-highlights" id="profileHighlights">
+                                    <span class="loading">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Suggested Questions -->
+                <div class="sidebar-section">
+                    <details class="suggested-collapsible" open>
+                        <summary class="suggested-header">Try asking:</summary>
+                        <div class="suggested-items">
+                            <button class="suggested-item" data-question="Tell me about yourself">Tell me about yourself</button>
+                            <button class="suggested-item" data-question="What data systems have you built?">Data systems built</button>
+                            <button class="suggested-item" data-question="What's your experience with AWS?">AWS experience</button>
+                            <button class="suggested-item" data-question="Describe your leadership style">Leadership style</button>
+                            <button class="suggested-item" data-question="What projects did you work on at Two Sigma?">Two Sigma projects</button>
+                            <button class="suggested-item" data-question="What makes you different from typical data engineering managers?">Unique strengths</button>
+                        </div>
+                    </details>
+                </div>
+            </aside>
+
+            <!-- Main Chat Area -->
+            <main class="chat-main">
+                <div class="chat-container">
+                    <div id="chatMessages" class="chat-messages"></div>
+                    <div class="chat-input-container">
+                        <input
+                            type="text"
+                            id="chatInput"
+                            placeholder="Ask about Yuanyuan's background, experience, or projects..."
+                            autocomplete="off"
+                        >
+                        <button id="sendButton">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="script.js?v=10"></script>
+</body>
+</html>

@@ -1,0 +1,985 @@
+{
+  "document_type": "personal_rag_profile_combined",
+  "version": "4.0",
+  "last_updated": "2026-03-17",
+  "source_files": [
+    "yuanyuan_li_rag_background.md",
+    "yuanyuan_li_rag_ingestion.json"
+  ],
+  "meta": {
+    "purpose": "This document is the comprehensive knowledge seed for building a personal RAG chatbot for Yuanyuan Li (also goes by Maggie / YY). It combines structured data with narrative context to help a chatbot answer questions about Yuanyuan's background, work history, technical strengths, leadership scope, project themes, and communication style.",
+    "sources": [
+      "Public website signals from yuanyuanli.com",
+      "Context from prior chats with Yuanyuan",
+      "Uploaded resume and roadmap documents",
+      "User-provided tell-me-about-yourself narrative"
+    ],
+    "notes": "This is a living document. Some items marked in open_questions should be reviewed and updated by Yuanyuan."
+  },
+  "profile": {
+    "name": "Yuanyuan Li",
+    "preferred_name": "Yuanyuan",
+    "also_known_as": ["Maggie", "YY"],
+    "headline": "Engineering Manager / Data Platform Lead / Full-Stack Engineer",
+    "primary_brand": "Engineering leader with a rare mix of full-stack product engineering, data platform leadership, and hands-on applied AI / developer tooling interest",
+    "location": "United States",
+    "location_context": "U.S.-based; frequently references New York / New Jersey context in planning and work-life logistics",
+    "languages": ["English", "Chinese"],
+    "language_note": "Often requests bilingual phrasing or translation support",
+    "summary": "Yuanyuan Li is an engineering leader with 10+ years of experience spanning full-stack product engineering, data platform architecture, and fintech. She has 7+ years at Two Sigma's Venn platform, where she evolved from founding engineer to tech lead to engineering manager. She combines product thinking, data systems expertise, and cross-functional leadership, and is especially strong at building systems from 0 to 1 and scaling teams and platforms in ambiguous environments.",
+    "executive_summary": "Yuanyuan Li is an engineering leader whose background spans frontend engineering, full-stack product development, and data platform leadership. Publicly, her website describes her as a VP of Software Engineering with 7+ years at Two Sigma (Venn) and says she built and led a full-stack and data engineering team from the ground up. She is strongest at the intersection of: data infrastructure, investment/analytics domain systems, cross-functional product delivery, engineering management, structured communication, and turning ambiguous business needs into concrete technical plans. She is unusually effective in both strategy and execution: writing roadmaps and PRDs, managing teams, designing data systems, reviewing legal/HR language, drafting stakeholder communication, and still going deep on implementation details such as Athena SQL, ETL architecture, AWS services, schema design, CI/CD, and debugging.",
+    "domains": [
+      "Fintech",
+      "Investment analytics",
+      "Data infrastructure",
+      "Full-stack product engineering",
+      "APIs and data platforms"
+    ],
+    "experience_years_total": "10+",
+    "experience_breakdown": {
+      "two_sigma_venn": "7+ years",
+      "ecommerce": "2+ years"
+    },
+    "seniority_level": [
+      "Engineering Manager",
+      "Senior / Staff+ level",
+      "0→1 builder",
+      "Platform leader"
+    ]
+  },
+  "canonical_story": {
+    "short_narrative": "Yuanyuan Li is a software engineering leader with roots in frontend and product engineering who expanded into backend, data infrastructure, and engineering management. At Venn / Two Sigma, she helped build product and data capabilities from an early-stage environment into a more mature platform, with particular depth in ingestion pipelines, investment analytics data, API strategy, and cross-functional execution.",
+    "tell_me_about_yourself": "Before joining Two Sigma about seven years ago, I started my career as a frontend engineer in the e-commerce space, working in a fast-paced startup environment. When I joined Two Sigma, I was part of an internal startup called Venn, which was still at the prototype stage. I worked as a founding engineer and helped build the product from scratch, including core user-facing features like the signup experience. I also introduced engineering best practices such as end-to-end testing with Cypress, improved caching strategies, and focused on delivering a strong user experience. As the product matured and launched to market, I grew into a tech lead role, where I owned feature development end-to-end across both frontend and backend services. I worked closely with cross-functional partners—product, design, and even clients—to deliver features that directly supported business needs. I was later promoted to engineering manager, where I focused on mentoring engineers and scaling the team. Around that time, we saw a growing need for data infrastructure, so I took the initiative to build out a data engineering team from scratch—growing it from zero to five engineers. I led hiring, established our development processes, and built the foundation for our data platform. Today, I lead the data platform team, working on large-scale data pipelines and systems that support analytics and client-facing products. I'm now particularly interested in opportunities where I can combine my full-stack and data background to build more AI-driven, product-focused systems.",
+    "short_bio": "Engineering leader with 10+ years of experience across full-stack development, data platforms, and fintech. Built and scaled teams and systems at Two Sigma's Venn, from prototype-stage product engineering to large-scale data infrastructure and APIs.",
+    "career_arc": [
+      "Frontend engineer in e-commerce startups",
+      "Founding engineer at Venn / Two Sigma",
+      "Tech lead across frontend and backend",
+      "Engineering manager building data platform team",
+      "Leader of large-scale data pipelines and analytics systems"
+    ],
+    "one_line_summary": "Yuanyuan Li is a product-minded engineering leader who evolved from frontend/full-stack development into data platform leadership, with deep strength in investment data systems, cross-functional delivery, structured communication, and practical AI-enabled engineering workflows."
+  },
+  "public_website_highlights": {
+    "current_positioning": {
+      "title": "VP of Software Engineering",
+      "tenure": "7+ years at Two Sigma (Venn)",
+      "achievement": "Built and led a full-stack and data engineering team from the ground up"
+    },
+    "portfolio_projects": [
+      {
+        "name": "GiveNext",
+        "theme": "Charitable giving product work"
+      },
+      {
+        "name": "MERID",
+        "theme": "Software engineering work involving a video hosting and file system component"
+      },
+      {
+        "name": "Cornell Feline Health Center",
+        "theme": "iOS development"
+      },
+      {
+        "name": "Cornell Diet Restrictions HCI Project",
+        "theme": "HCI project for Cornell students with diet restrictions"
+      }
+    ],
+    "background_implications": "Yuanyuan's background is not only data engineering. She has history in: product/UI work, academic/team project collaboration, mobile or app development exposure, human-centered design / usability-oriented work."
+  },
+  "roles": [
+    {
+      "company": "Two Sigma (Venn)",
+      "title": "VP, Software Engineer Manager / Engineering Manager / Data Platform Lead",
+      "dates": "2018-07 to Present",
+      "highlights": [
+        "Built a high-performing data engineering team from the ground up",
+        "Partnered with Product and Quant teams to deliver revenue-generating data products",
+        "Led development of API platforms including Factor API, Integration API, and Analytics API",
+        "Scaled ETL platform on AWS using Glue, Step Functions, Lambda, and S3",
+        "Provided technical leadership across React/TypeScript frontend and Java/Python backend",
+        "Drove hiring, onboarding, mentoring, and internal promotions"
+      ],
+      "scope": {
+        "leadership": "Led Data Platform Team at Venn Engineering",
+        "planning": "Owned quarterly roadmap planning for team, collaborated on yearly engineering roadmap",
+        "mentorship": "Mentored engineers and supported promotions / performance reviews",
+        "stakeholders": "Worked closely with product, quant, business stakeholders, and senior leadership"
+      },
+      "domain_context": [
+        "Investment data onboarding",
+        "Portfolio / holdings / returns ingestion",
+        "Factor models and factor analytics",
+        "Risk and performance analytics",
+        "Advisor / client onboarding workflows",
+        "Vendor data integration for financial products"
+      ],
+      "common_business_context": [
+        "Translating business or client needs into data platform capabilities",
+        "New data sources and onboarding pipelines",
+        "File format specifications",
+        "APIs for analytics or integration",
+        "Incident response and data quality improvement",
+        "Scalable ingestion and historical data support"
+      ],
+      "skills": [
+        "Data platform architecture",
+        "ETL pipelines",
+        "AWS",
+        "Team building",
+        "Cross-functional leadership",
+        "APIs",
+        "Fintech"
+      ],
+      "source_refs": [
+        "resume",
+        "roadmap"
+      ]
+    },
+    {
+      "company": "Jet.com (Walmart)",
+      "title": "Frontend Engineer",
+      "dates": "2017-01 to 2018-07",
+      "highlights": [
+        "Led a five-person engineering team in rebuilding order history using React and Redux",
+        "Built modular analytics tracking library for frontend behavior analysis",
+        "Worked cross-functionally with PM, design, marketing analytics, and backend engineers",
+        "Won first place at internal hackathon with idea adopted into a new product line"
+      ],
+      "skills": [
+        "React",
+        "Redux",
+        "Frontend architecture",
+        "Analytics instrumentation",
+        "Agile delivery"
+      ],
+      "source_refs": [
+        "resume"
+      ]
+    },
+    {
+      "company": "SupplyHouse",
+      "title": "Web Developer",
+      "dates": "2016-08 to 2017-01",
+      "highlights": [
+        "Developed responsive e-commerce web pages",
+        "Worked with Java, JavaScript, HTML5, CSS3, jQuery, and Bootstrap",
+        "Improved performance, cross-browser compatibility, and UX"
+      ],
+      "skills": [
+        "JavaScript",
+        "Java",
+        "HTML",
+        "CSS",
+        "jQuery",
+        "Bootstrap"
+      ],
+      "source_refs": [
+        "resume"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "school": "Cornell University",
+      "degree": "Master's Degree",
+      "field": "Information Science"
+    },
+    {
+      "school": "University of International Business and Economics",
+      "degree": "Bachelor's Degree",
+      "field": "Electronic-Commerce"
+    }
+  ],
+  "skills": {
+    "programming_languages": [
+      "Python",
+      "SQL",
+      "Java",
+      "JavaScript",
+      "TypeScript"
+    ],
+    "frontend": [
+      "React",
+      "Next.js",
+      "Vue",
+      "Angular",
+      "Redux",
+      "Cypress",
+      "Jest",
+      "Webpack",
+      "Yarn"
+    ],
+    "backend": [
+      "Python",
+      "Java",
+      "Node.js",
+      "REST",
+      "GraphQL",
+      "PostgreSQL"
+    ],
+    "cloud_data": [
+      "AWS Lambda",
+      "AWS Step Functions",
+      "AWS Athena",
+      "AWS S3",
+      "AWS Glue",
+      "SQS",
+      "QuickSight"
+    ],
+    "data_platform": [
+      "ETL / ELT pipelines",
+      "Batch and stream ingestion",
+      "Relational storage and data lakes",
+      "Schema design and data contracts",
+      "Data quality checks and monitoring",
+      "Metadata-driven ingestion workflows",
+      "Vendor file processing and normalization"
+    ],
+    "cloud_infrastructure": [
+      "AWS (especially S3, Athena, Glue, Lambda, Step Functions)",
+      "CI/CD and deployment workflows",
+      "Operational debugging and production support",
+      "Lifecycle / storage management for large data sets"
+    ],
+    "product_application_engineering": [
+      "Frontend engineering foundations",
+      "React / JavaScript / TypeScript familiarity",
+      "Backend/API collaboration",
+      "Designing for stakeholder usability and client workflows"
+    ],
+    "applied_ai_productivity": [
+      "LLM-assisted engineering workflows",
+      "AI for developer productivity",
+      "RAG-like systems for internal knowledge or data QA",
+      "Structured prompting and tool use",
+      "Agent-style workflows such as bots for Athena queries or GitLab automation"
+    ],
+    "leadership": [
+      "Hiring",
+      "Mentorship",
+      "Roadmap planning",
+      "OKRs",
+      "Incident review",
+      "Agile process design",
+      "Cross-functional alignment"
+    ],
+    "strategic_strengths": [
+      "0→1 product building",
+      "Scaling platforms and teams",
+      "Bridging frontend and data systems",
+      "Business-to-technical translation",
+      "Product-oriented engineering"
+    ]
+  },
+  "domain_expertise": {
+    "financial_domain": [
+      "Factor models",
+      "Portfolio analytics",
+      "Risk and performance analytics",
+      "Private assets workflows",
+      "Client onboarding for investment platforms"
+    ],
+    "vendors_and_data_sources": [
+      "Axioma",
+      "Bloomberg",
+      "Morningstar",
+      "MSCI",
+      "eVestment",
+      "Preqin",
+      "Addepar",
+      "HFR",
+      "FactSet"
+    ]
+  },
+  "projects": [
+    {
+      "name": "Factor API - Factor Forecasts",
+      "timeframe": "Q4 2024",
+      "category": "API / analytics",
+      "summary": "Built forecasting capabilities for factor models and integrated them into the API layer for client usage.",
+      "problems_solved": [
+        "Expose forward-looking factor analytics",
+        "Support client-facing factor forecast use cases"
+      ],
+      "technologies": [
+        "APIs",
+        "Data modeling",
+        "Fintech analytics"
+      ],
+      "outcomes": [
+        "Factor forecast deliverables shipped",
+        "Extended platform analytics capabilities"
+      ],
+      "source_refs": [
+        "roadmap"
+      ]
+    },
+    {
+      "name": "Analytics API - Performance Metrics",
+      "timeframe": "Q1-Q2 2024",
+      "category": "API / analytics",
+      "summary": "Designed API structure for performance metrics including time series, benchmark comparison, and configurable analysis windows.",
+      "problems_solved": [
+        "Needed client-facing analytics endpoints",
+        "Needed consistent API design for analytics metrics"
+      ],
+      "technologies": [
+        "API design",
+        "Performance analytics",
+        "Documentation"
+      ],
+      "outcomes": [
+        "Historical performance metrics added",
+        "Client-facing documentation released"
+      ],
+      "source_refs": [
+        "roadmap"
+      ]
+    },
+    {
+      "name": "Bitemporal Holdings Data Model",
+      "timeframe": "Q3-Q4 2024",
+      "category": "data modeling",
+      "summary": "Built a scalable schema for historical holdings using a bitemporal model to support point-in-time correctness and auditability.",
+      "problems_solved": [
+        "Historical holdings scalability",
+        "Point-in-time consistency",
+        "Auditability across changing data"
+      ],
+      "technologies": [
+        "Bitemporal modeling",
+        "Holdings metadata",
+        "Scalable schemas"
+      ],
+      "outcomes": [
+        "Store holdings metadata in a bitemporal model",
+        "Improved historical correctness"
+      ],
+      "source_refs": [
+        "roadmap"
+      ]
+    },
+    {
+      "name": "Configurable ETL Pipelines",
+      "timeframe": "Q1 2024",
+      "category": "data platform",
+      "summary": "Standardized and automated ETL workflows to reduce onboarding time for new datasets.",
+      "problems_solved": [
+        "Manual, slow onboarding for datasets",
+        "Lack of reusable ingestion patterns"
+      ],
+      "technologies": [
+        "ETL",
+        "Serverless orchestration",
+        "Design docs",
+        "Standardization"
+      ],
+      "outcomes": [
+        "Reduced new ingestion development time",
+        "Reusable pipeline patterns"
+      ],
+      "source_refs": [
+        "roadmap"
+      ]
+    },
+    {
+      "name": "Data Quality Framework / ETP Remediation Tooling",
+      "timeframe": "Q2-Q3 2024",
+      "category": "data quality",
+      "summary": "Built tooling to track completeness, detect data issues, and support remediation workflows.",
+      "problems_solved": [
+        "Need to understand data issues systematically",
+        "Need completeness tracking and quality visibility"
+      ],
+      "technologies": [
+        "Data quality tooling",
+        "Monitoring",
+        "Golden dataset proof of concept"
+      ],
+      "outcomes": [
+        "Track data quality issues more systematically",
+        "Primary goal of ETP completeness"
+      ],
+      "source_refs": [
+        "roadmap"
+      ]
+    },
+    {
+      "name": "Pipeline Performance Optimization",
+      "timeframe": "2024",
+      "category": "reliability / performance",
+      "summary": "Improved pipeline throughput and stability by increasing batch size, optimizing resource usage, and eliminating read/write IO bottlenecks.",
+      "problems_solved": [
+        "ETP read/write IO errors",
+        "Scalability issues in holdings pipelines",
+        "Rapid table growth"
+      ],
+      "technologies": [
+        "AWS data platform",
+        "Resource optimization",
+        "Batch processing"
+      ],
+      "outcomes": [
+        "Stopped hitting ETP read/write IO errors",
+        "Improved downstream throughput and holdings scalability"
+      ],
+      "source_refs": [
+        "roadmap"
+      ]
+    },
+    {
+      "name": "Morningstar Indices Migration (replace MSCI / ICE paths where relevant)",
+      "timeframe": "2024",
+      "category": "vendor migration",
+      "summary": "Replaced or expanded factor input data sources and total return ingestion using Morningstar pipelines.",
+      "problems_solved": [
+        "Need better factor input data quality and vendor alignment",
+        "Need migration path for equity and index data"
+      ],
+      "technologies": [
+        "Vendor integration",
+        "Factor input pipelines",
+        "Equity total return ingestion"
+      ],
+      "outcomes": [
+        "Prod pipeline uses Morningstar indices to compute factors",
+        "Equity data migration completed for relevant flows"
+      ],
+      "source_refs": [
+        "roadmap"
+      ]
+    },
+    {
+      "name": "eVestment Integration Expansion",
+      "timeframe": "2023-2024",
+      "category": "vendor integration",
+      "summary": "Expanded metadata support, net returns support, and user-entered data ingestion for eVestment.",
+      "problems_solved": [
+        "Need richer metadata",
+        "Need shorter and cleaner names in data library",
+        "Need net return and user-entered data support"
+      ],
+      "technologies": [
+        "Metadata ingestion",
+        "Vendor normalization",
+        "Application data mapping"
+      ],
+      "outcomes": [
+        "Expanded eVestment metadata",
+        "Enabled user-entered data integration",
+        "Improved naming and data mapping in Venn"
+      ],
+      "source_refs": [
+        "roadmap"
+      ]
+    },
+    {
+      "name": "Preqin / Private Assets Data Pipelines",
+      "timeframe": "2023-2024",
+      "category": "private assets",
+      "summary": "Built ingestion pipelines and supporting models for private assets and Preqin datasets.",
+      "problems_solved": [
+        "Need data support for private assets workflow launch",
+        "Need additional private data in production for PAL clients"
+      ],
+      "technologies": [
+        "Private asset ingestion",
+        "Pipeline design",
+        "Financial data modeling"
+      ],
+      "outcomes": [
+        "Preqin private data onboarded",
+        "Private asset workflows enabled"
+      ],
+      "source_refs": [
+        "roadmap"
+      ]
+    },
+    {
+      "name": "Addepar Self-Service Integration",
+      "timeframe": "2023",
+      "category": "integration / onboarding",
+      "summary": "Enabled Addepar SSO and self-service integration to reduce onboarding friction.",
+      "problems_solved": [
+        "Manual onboarding friction",
+        "Need easier client setup and integration"
+      ],
+      "technologies": [
+        "SSO",
+        "Self-service onboarding",
+        "Integration workflows"
+      ],
+      "outcomes": [
+        "Self-service Addepar integration launched",
+        "Reduced onboarding friction"
+      ],
+      "source_refs": [
+        "roadmap"
+      ]
+    },
+    {
+      "name": "Serverless Data Platform Evolution / DaaS Exploration",
+      "timeframe": "2023-2024",
+      "category": "platform strategy",
+      "summary": "Shifted toward serverless ingestion orchestration and explored Data as a Service architecture for future platform evolution.",
+      "problems_solved": [
+        "Need more scalable onboarding architecture",
+        "Need future-facing external data serving strategy"
+      ],
+      "technologies": [
+        "Serverless orchestration",
+        "Architecture proposals",
+        "Platform strategy"
+      ],
+      "outcomes": [
+        "Serverless ETL enhancement direction established",
+        "DaaS options proposals created"
+      ],
+      "source_refs": [
+        "roadmap"
+      ]
+    }
+  ],
+  "project_clusters": {
+    "description": "Thematic groupings of project work to help understand patterns and areas of focus",
+    "cluster_a_data_ingestion_onboarding": {
+      "theme": "Data ingestion and onboarding",
+      "representative_work": [
+        "Integrating third-party partner data",
+        "Client uploads through API or SFTP",
+        "Transforming external data into internal product-ready models",
+        "Handling file specs, timestamp rules, and operational edge cases"
+      ]
+    },
+    "cluster_b_investment_analytics_factor_data": {
+      "theme": "Investment analytics and factor data",
+      "representative_work": [
+        "Factor model pipeline maintenance",
+        "Vendor migrations for factor or style data",
+        "Risk analytics outputs for investors",
+        "Index and forecast data integration"
+      ]
+    },
+    "cluster_c_platform_reliability_incident_management": {
+      "theme": "Platform reliability and incident management",
+      "representative_work": [
+        "Data incident management process improvements",
+        "Review groups / retrospectives",
+        "Quality and performance improvements",
+        "Better client communication around incidents"
+      ]
+    },
+    "cluster_d_api_product_platform_expansion": {
+      "theme": "API and product platform expansion",
+      "representative_work": [
+        "Analytics APIs",
+        "Factor APIs",
+        "Integration APIs",
+        "Commercialization / productization of platform capabilities"
+      ]
+    },
+    "cluster_e_early_stage_fullstack_product": {
+      "theme": "Early-stage full-stack product building",
+      "representative_work": [
+        "Startup-style product building",
+        "Frontend architecture and UX improvements",
+        "End-to-end feature delivery",
+        "Close partnership with product, design, marketing, sales, and clients"
+      ]
+    }
+  },
+  "leadership_profile": {
+    "management_scope": {
+      "team_built": "0 to 4+ engineers",
+      "team_context": "Data engineering / data platform team"
+    },
+    "leadership_areas": [
+      "Hiring and onboarding",
+      "Career development and mentorship",
+      "Team process design",
+      "Cross-functional roadmap planning",
+      "Incident review and operational maturity"
+    ],
+    "cross_functional_partners": [
+      "Product",
+      "Quant",
+      "Sales",
+      "Marketing",
+      "Legal",
+      "Client Solutions",
+      "Design"
+    ],
+    "leadership_style": [
+      "Structured",
+      "Practical",
+      "Ownership-oriented",
+      "Collaborative",
+      "Product-minded"
+    ]
+  },
+  "working_style": {
+    "characteristics": [
+      "Highly structured",
+      "Detail-oriented",
+      "Execution-focused",
+      "Pragmatic under constraints",
+      "Thoughtful about business impact",
+      "Proactive in planning and follow-through"
+    ]
+  },
+  "communication_style": {
+    "preferences": [
+      "Ready to paste into Slack / email / docs / JIRA",
+      "Clearly structured with sections",
+      "Concise but concrete",
+      "Polished and professional",
+      "Actionable rather than abstract",
+      "Sometimes bilingual or easy to translate"
+    ],
+    "common_output_formats": [
+      "Bullet-point summaries",
+      "One-pagers",
+      "Roadmap / PRD outlines",
+      "JIRA ticket templates with AC / tasks",
+      "SQL or Python snippets",
+      "Tables with clear headers",
+      "Speech notes for presentations",
+      "Email drafts and stakeholder messages"
+    ]
+  },
+  "answering_style": {
+    "tone": [
+      "structured",
+      "concise",
+      "practical",
+      "example-driven"
+    ],
+    "preferences": [
+      "Use bullets when helpful",
+      "Ground answers in real systems and tradeoffs",
+      "Avoid generic textbook answers",
+      "Be transparent when context is missing"
+    ]
+  },
+  "personal_context_optional": {
+    "note": "This section should live in a private collection and should be removable if Yuanyuan wants a more work-only bot. Do NOT over-index on private life in normal answers unless the user's question is explicitly personal.",
+    "suggested_context": [
+      "She is family-oriented and balances senior technical leadership with parenting responsibilities",
+      "She often plans carefully across work, travel, childcare, and household logistics",
+      "She has a dog named Ruby",
+      "She frequently uses ChatGPT as both a technical copilot and a life admin assistant"
+    ]
+  },
+  "chatbot_capabilities": {
+    "should_answer_well": [
+      "What is Yuanyuan's professional background?",
+      "How did she move from frontend / full-stack work into data platform leadership?",
+      "What domains has she worked in at Venn / Two Sigma?",
+      "What kinds of data systems has she built or led?",
+      "What is her management and leadership style?",
+      "What tools and platforms does she commonly use?",
+      "What kinds of projects best represent her experience?",
+      "How should a message or bio be written in her voice?",
+      "What are recurring themes in her technical work?"
+    ],
+    "should_avoid": [
+      "Inventing exact dates, titles, or metrics that are not grounded in source material",
+      "Stating personal or sensitive facts unless they are intentionally included in a private knowledge base",
+      "Overfitting to only one identity (for example: 'only a data engineer' or 'only a manager')",
+      "Answering legal, HR, compensation, or family questions with certainty unless the supporting documents are actually indexed"
+    ]
+  },
+  "privacy": {
+    "allowed": [
+      "work experience",
+      "technical systems",
+      "leadership approach",
+      "public professional background"
+    ],
+    "restricted_unless_explicitly_enabled": [
+      "family",
+      "personal life",
+      "financial planning",
+      "private conversations"
+    ]
+  },
+  "retrieval_configuration": {
+    "recommended_collections": {
+      "collection_1_public_profile": {
+        "sources": [
+          "personal website",
+          "resume",
+          "LinkedIn export",
+          "public portfolio pages",
+          "talk abstracts / public writing"
+        ],
+        "use_for": [
+          "bios",
+          "recruiter questions",
+          "interview prep",
+          "public-facing summaries"
+        ]
+      },
+      "collection_2_work_knowledge_private": {
+        "sources": [
+          "project docs",
+          "PRDs",
+          "architecture notes",
+          "roadmap docs",
+          "performance review notes",
+          "presentations",
+          "meeting notes that are safe to index"
+        ],
+        "use_for": [
+          "internal project recall",
+          "detailed accomplishment summaries",
+          "examples for interviews",
+          "leadership narratives"
+        ]
+      },
+      "collection_3_personal_context_optional": {
+        "sources": [
+          "preferred writing samples",
+          "travel templates",
+          "life admin templates",
+          "family scheduling notes",
+          "repeated personal preferences"
+        ],
+        "use_for": [
+          "drafting in her voice",
+          "personalized planning help",
+          "recurring routines and preferences"
+        ]
+      }
+    },
+    "aliases": {
+      "experience": [
+        "10+ years experience",
+        "7+ years at Two Sigma",
+        "2+ years in e-commerce"
+      ],
+      "role_aliases": [
+        "Engineering Manager",
+        "Data Platform Lead",
+        "Full-Stack Engineer",
+        "Founding Engineer",
+        "Tech Lead",
+        "VP of Software Engineering"
+      ],
+      "company_aliases": [
+        "Two Sigma",
+        "Venn",
+        "Jet.com",
+        "Walmart",
+        "SupplyHouse",
+        "Cornell"
+      ],
+      "topic_aliases": [
+        "factor models",
+        "analytics API",
+        "integration API",
+        "Factor API",
+        "Analytics API",
+        "Integration API",
+        "ETL platform",
+        "AWS data pipelines",
+        "bitemporal holdings",
+        "data quality",
+        "Morningstar migration",
+        "eVestment integration",
+        "Preqin",
+        "Addepar",
+        "RCM",
+        "FactSet",
+        "Axioma"
+      ],
+      "technology_aliases": [
+        "AWS",
+        "Athena",
+        "Glue",
+        "Lambda",
+        "S3",
+        "Step Functions",
+        "Python",
+        "React",
+        "TypeScript",
+        "JavaScript",
+        "Java",
+        "SQL"
+      ]
+    }
+  },
+  "chunking_recommendation": {
+    "chunk_size_characters": 700,
+    "chunk_overlap_characters": 100,
+    "chunk_size_tokens": "300-500",
+    "overlap_tokens": 50,
+    "chunk_by": [
+      "project",
+      "system",
+      "leadership_story",
+      "API",
+      "career_stage"
+    ],
+    "metadata_fields": [
+      "section_type",
+      "section",
+      "project_name",
+      "timeframe",
+      "company",
+      "tech_stack",
+      "domain",
+      "category",
+      "visibility",
+      "confidence",
+      "audience"
+    ],
+    "metadata_suggestions": {
+      "source_type": [
+        "website",
+        "resume",
+        "performance_review",
+        "project_doc",
+        "email_draft",
+        "presentation",
+        "note"
+      ],
+      "topic": [
+        "leadership",
+        "data-platform",
+        "factor-model",
+        "api",
+        "onboarding",
+        "incident-management",
+        "personal-brand"
+      ],
+      "time_period": "e.g. 2016, 2024-Q3, 2025",
+      "visibility": [
+        "public",
+        "private",
+        "restricted"
+      ],
+      "confidence": [
+        "verified",
+        "inferred",
+        "draft-to-confirm"
+      ],
+      "audience": [
+        "recruiter",
+        "hiring-manager",
+        "teammate",
+        "self",
+        "family"
+      ]
+    }
+  },
+  "system_prompt_guidance": {
+    "guidance": "You are a personal assistant for Yuanyuan Li. Represent her background accurately and conservatively. Prefer grounded answers over impressive-sounding ones. When discussing her career, reflect both her product/full-stack roots and her later data platform leadership. Separate public facts from private context. When uncertain, say what is known, what is inferred, and what still needs confirmation.",
+    "key_principles": [
+      "Accuracy First: Never hallucinate dates, metrics, titles",
+      "Be Grounded: Distinguish verified vs. inferred information",
+      "Respect Privacy: No speculation on personal/family/financial",
+      "Balanced Identity: Not 'only a data engineer' or 'only a manager'",
+      "Business Context: Understand she translates business needs into technical solutions",
+      "Communication Style: Structured, direct, polite, concrete, business-aware"
+    ]
+  },
+  "evaluation_qa_pairs": [
+    {
+      "question": "Give me a short professional bio for Yuanyuan Li.",
+      "good_answer_should_include": [
+        "engineering leader",
+        "full-stack + data platform background",
+        "Venn / Two Sigma",
+        "cross-functional execution",
+        "investment analytics/data domain"
+      ]
+    },
+    {
+      "question": "What makes Yuanyuan different from a typical data engineering manager?",
+      "good_answer_should_include": [
+        "frontend/product roots",
+        "end-to-end product sense",
+        "leadership plus hands-on technical depth",
+        "strong communication and planning discipline"
+      ]
+    },
+    {
+      "question": "What kinds of projects has Yuanyuan led?",
+      "good_answer_should_include": [
+        "ingestion pipelines",
+        "analytics APIs",
+        "factor/risk data work",
+        "incident management improvements",
+        "onboarding and integration systems"
+      ]
+    },
+    {
+      "question": "How should I draft a message in Yuanyuan's style?",
+      "good_answer_should_include": [
+        "structured",
+        "direct",
+        "polite",
+        "concrete",
+        "easy to paste",
+        "business-aware",
+        "minimal fluff"
+      ]
+    },
+    {
+      "question": "What should I be careful about when answering questions about Yuanyuan?",
+      "good_answer_should_include": [
+        "do not hallucinate dates/metrics",
+        "distinguish public vs private facts",
+        "avoid oversharing personal context",
+        "clarify uncertain items"
+      ]
+    }
+  ],
+  "starter_questions": [
+    {
+      "question": "Tell me about yourself",
+      "answer_source": "canonical_story.tell_me_about_yourself"
+    },
+    {
+      "question": "What data systems have you built?",
+      "answer_source": "projects + skills.cloud_data + roles[0]"
+    },
+    {
+      "question": "How do you design scalable data platforms?",
+      "answer_source": "projects: configurable ETL, bitemporal holdings, serverless evolution, pipeline optimization"
+    },
+    {
+      "question": "What is your leadership style?",
+      "answer_source": "leadership_profile"
+    },
+    {
+      "question": "What makes you different from typical data engineering managers?",
+      "answer_source": "executive_summary + career_arc + portfolio_projects"
+    }
+  ],
+  "open_questions_for_improvement": [
+    "What exact headline does Yuanyuan want as her canonical current title?",
+    "Which achievements are safe to state publicly with metrics?",
+    "Which resume / LinkedIn version is the source of truth?",
+    "Which private docs should be indexed first: resume, self-reviews, PRDs, slide decks, or project docs?",
+    "Should the bot include personal life context, or stay mostly career-focused?",
+    "What tone modes should exist: recruiter-ready, manager-ready, casual, executive, bilingual?",
+    "Which topics are off-limits or require extra caution?"
+  ],
+  "recommended_next_ingestion": [
+    "latest resume",
+    "LinkedIn profile export or copy",
+    "tell me about yourself interview answer (already included)",
+    "3-5 representative project docs or one-pagers",
+    "recent performance review / self-review",
+    "a few polished emails or docs that reflect her writing voice"
+  ],
+  "source_notes": {
+    "resume": "Structured from uploaded resume.",
+    "roadmap": "Structured from uploaded data team quarterly roadmap.",
+    "user_direct_input": "Includes user-provided tell-me-about-yourself narrative and experience correction.",
+    "website": "Public website signals from yuanyuanli.com including portfolio projects.",
+    "prior_chats": "Context from prior conversations with Yuanyuan."
+  }
+}

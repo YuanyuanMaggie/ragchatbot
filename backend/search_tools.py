@@ -1,0 +1,66 @@
+from abc import ABC, abstractmethod
+from typing import Any, Dict
+
+
+class Tool(ABC):
+    """Abstract base class for all tools"""
+
+    @abstractmethod
+    def get_tool_definition(self) -> Dict[str, Any]:
+        """Return Anthropic tool definition for this tool"""
+        pass
+
+    @abstractmethod
+    def execute(self, **kwargs) -> str:
+        """Execute the tool with given parameters"""
+        pass
+
+
+class ToolManager:
+    """Manages available tools for the AI"""
+
+    def __init__(self):
+        self.tools = {}
+
+    def register_tool(self, tool: Tool):
+        """Register any tool that implements the Tool interface"""
+        tool_def = tool.get_tool_definition()
+        tool_name = tool_def.get("name")
+        if not tool_name:
+            raise ValueError("Tool must have a 'name' in its definition")
+        self.tools[tool_name] = tool
+
+    def get_tool_definitions(self) -> list:
+        """Get all tool definitions for Anthropic tool calling"""
+        return [tool.get_tool_definition() for tool in self.tools.values()]
+
+    def execute_tool(self, tool_name: str, **kwargs) -> str:
+        """Execute a tool by name with given parameters"""
+        if tool_name not in self.tools:
+            return f"Tool '{tool_name}' not found"
+
+        return self.tools[tool_name].execute(**kwargs)
+
+    def get_last_sources(self) -> list:
+        """Get sources from the last search operation"""
+        # Check all tools for last_sources attribute
+        for tool in self.tools.values():
+            if hasattr(tool, "last_sources") and tool.last_sources:
+                return tool.last_sources
+        return []
+
+    def get_last_source_links(self) -> list:
+        """Get source links from the last search operation"""
+        # Check all tools for last_source_links attribute
+        for tool in self.tools.values():
+            if hasattr(tool, "last_source_links") and tool.last_source_links:
+                return tool.last_source_links
+        return []
+
+    def reset_sources(self):
+        """Reset sources from all tools that track sources"""
+        for tool in self.tools.values():
+            if hasattr(tool, "last_sources"):
+                tool.last_sources = []
+            if hasattr(tool, "last_source_links"):
+                tool.last_source_links = []
