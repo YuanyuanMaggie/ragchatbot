@@ -24,20 +24,16 @@ It provides accurate, grounded responses with proper source attribution.
 
 ## 📚 Knowledge Base
 
-The system loads two documents on startup:
+The system loads one comprehensive profile document on startup:
 
-1. **yuanyuan_li_rag_background.md**
-   - Comprehensive narrative background
-   - Career arc and professional story
-   - Working style and communication preferences
+**yuanyuan_li_profile.json** - Combined comprehensive profile
+   - Structured profile data: roles, projects, skills, education
+   - Narrative content: tell-me-about-yourself, short bio, career arc
    - Domain expertise and project themes
-
-2. **yuanyuan_li_rag_ingestion.json**
-   - Structured profile data
+   - Leadership and working style
+   - Communication preferences
    - 3 work experience entries (Two Sigma, Jet.com, SupplyHouse)
-   - 12 key projects with metadata
-   - Skills grouped by category
-   - Education background
+   - 12+ key projects with metadata
 
 **Total Knowledge:** 75+ sections, 270+ searchable chunks
 
@@ -47,7 +43,7 @@ The system loads two documents on startup:
 
 - Python environment with `uv` installed
 - Anthropic API key
-- All profile documents in root directory
+- yuanyuan_li_profile.json in root directory
 
 ### 2. Set API Key
 
@@ -157,8 +153,7 @@ ragchatbot-codebase-main/
 │   ├── index.html                      # Main UI
 │   ├── script.js                       # Frontend logic
 │   └── style.css                       # Styling
-├── yuanyuan_li_rag_background.md       # Narrative background
-├── yuanyuan_li_rag_ingestion.json      # Structured profile
+├── yuanyuan_li_profile.json            # Comprehensive profile (combines narrative + structured data)
 ├── .env                                # API keys (not in repo)
 ├── run.sh                              # Startup script
 └── README_PROFILE.md                   # This file
@@ -214,16 +209,13 @@ uv run pytest
 
 ### Add New Information
 
-1. **For narrative content:**
-   - Edit `yuanyuan_li_rag_background.md`
-   - Add new sections with ## headers
+1. **Edit the profile file:**
+   - Edit `yuanyuan_li_profile.json`
+   - Update roles, projects, skills, education, or canonical_story sections
+   - Add new content following the existing JSON structure
 
-2. **For structured data:**
-   - Edit `yuanyuan_li_rag_ingestion.json`
-   - Add new roles, projects, or skills
-
-3. **Reload:**
-   - Restart the server to reload documents
+2. **Reload:**
+   - Restart the server to reload the updated profile
 
 ### Best Practices
 
@@ -245,8 +237,9 @@ Common issues:
 - Dependencies missing → Run `uv sync`
 
 ### Profile Not Loading
-- Verify files exist in root directory
+- Verify yuanyuan_li_profile.json exists in root directory
 - Check file permissions
+- Validate JSON syntax
 - Look for errors in server logs
 
 ### Bad Responses

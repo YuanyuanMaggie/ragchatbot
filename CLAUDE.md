@@ -16,6 +16,8 @@ cd backend && uv run uvicorn app:app --reload --port 8000
 
 ### Environment Setup
 ```bash
+# Python version requirement: >= 3.13 (specified in pyproject.toml)
+
 # Install dependencies
 uv sync
 
@@ -118,9 +120,9 @@ This is a Retrieval-Augmented Generation (RAG) system for Yuanyuan Li's personal
 - Supports filtered search by section type, timeframe, and company
 
 **ProfileDocumentProcessor (backend/profile_document_processor.py)**: Document processing
-- Processes Markdown files (narrative background documents)
-- Processes JSON files (structured profile data)
-- Smart chunking with context preservation (700 char chunks, 100 char overlap)
+- Processes JSON profile file (yuanyuan_li_profile.json)
+- Handles structured profile data: roles, projects, skills, education, canonical story
+- Smart chunking with context preservation (800 char chunks, 100 char overlap)
 - Extracts metadata automatically (company, timeframe, technologies)
 
 **AIGenerator (backend/ai_generator.py)**: Anthropic Claude API integration
@@ -154,7 +156,7 @@ This is a Retrieval-Augmented Generation (RAG) system for Yuanyuan Li's personal
 - Response: `{ status: str, message: str }`
 
 ### Data Flow
-1. Profile documents (yuanyuan_li_rag_background.md, yuanyuan_li_rag_ingestion.json) are loaded on startup
+1. Profile document (yuanyuan_li_profile.json) is loaded on startup
 2. ProfileDocumentProcessor chunks content and extracts profile metadata
 3. VectorStore stores both metadata and content in separate ChromaDB collections
 4. User queries trigger AI generation with access to profile search tools
@@ -162,7 +164,7 @@ This is a Retrieval-Augmented Generation (RAG) system for Yuanyuan Li's personal
 6. Frontend displays responses with source attribution (section, company, timeframe)
 
 ### Key Configuration (backend/config.py)
-- Profile chunk size: 700 characters with 100 character overlap
+- Profile chunk size: 800 characters with 100 character overlap
 - Embedding model: all-MiniLM-L6-v2 (SentenceTransformers)
 - Max search results: 5 per query
 - Conversation history: 2 message pairs
@@ -176,9 +178,9 @@ This is a Retrieval-Augmented Generation (RAG) system for Yuanyuan Li's personal
 
 ## Development Notes
 
-- The system automatically loads profile documents from root directory on startup
+- The system automatically loads yuanyuan_li_profile.json from root directory on startup
 - ChromaDB data persists in backend/chroma_db/
 - FastAPI serves both API endpoints (/api/*) and static frontend files
 - CORS is configured for development with broad permissions
 - No-cache headers are set for static files during development
-- Profile data includes: roles, projects, skills, education, and background narrative
+- Profile data includes: roles, projects, skills, education, canonical story, and comprehensive metadata

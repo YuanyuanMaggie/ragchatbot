@@ -119,10 +119,9 @@ async def startup_event():
     """Load initial profile documents on startup"""
     print("Loading profile documents...")
     try:
-        # Load profile files from root directory
+        # Load profile file from root directory
         profile_files = [
-            "../yuanyuan_li_rag_background.md",
-            "../yuanyuan_li_rag_ingestion.json",
+            "../yuanyuan_li_profile.json",
         ]
         total_sections = 0
         total_chunks = 0
