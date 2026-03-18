@@ -13,7 +13,7 @@ class Config:
 
     # Anthropic API settings
     ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
-    ANTHROPIC_MODEL: str = "claude-sonnet-4-20250514"
+    ANTHROPIC_MODEL: str = "claude-haiku-4-5-20251001"
 
     # Profile settings
     PROFILE_PATH: str = "../yuanyuan_li_profile.json"  # Path to profile JSON

@@ -154,7 +154,7 @@ This is a simplified RAG system for Yuanyuan Li's personal profile. The entire p
 
 ### Key Configuration (backend/config.py)
 - Profile path: ../yuanyuan_li_profile.json
-- Claude model: claude-sonnet-4-20250514
+- Claude model: claude-haiku-4-5-20251001
 - Conversation history: 2 message pairs
 - Lambda memory: 512MB (production)
 

@@ -1,13 +1,4 @@
-from dataclasses import dataclass
 from typing import Dict, List, Optional
-
-
-@dataclass
-class Message:
-    """Represents a single message in a conversation"""
-
-    role: str  # "user" or "assistant"
-    content: str  # The message content
 
 
 class SessionManager:
@@ -15,7 +6,7 @@ class SessionManager:
 
     def __init__(self, max_history: int = 5):
         self.max_history = max_history
-        self.sessions: Dict[str, List[Message]] = {}
+        self.sessions: Dict[str, List[dict]] = {}
         self.session_counter = 0
 
     def create_session(self) -> str:
@@ -25,40 +16,24 @@ class SessionManager:
         self.sessions[session_id] = []
         return session_id
 
-    def add_message(self, session_id: str, role: str, content: str):
-        """Add a message to the conversation history"""
+    def add_exchange(self, session_id: str, user_message: str, assistant_message: str):
+        """Add a complete question-answer exchange"""
         if session_id not in self.sessions:
             self.sessions[session_id] = []
 
-        message = Message(role=role, content=content)
-        self.sessions[session_id].append(message)
+        self.sessions[session_id].append({"role": "user", "content": user_message})
+        self.sessions[session_id].append({"role": "assistant", "content": assistant_message})
 
-        # Keep conversation history within limits
+        # Keep within limits (max_history pairs = max_history * 2 messages)
         if len(self.sessions[session_id]) > self.max_history * 2:
-            self.sessions[session_id] = self.sessions[session_id][
-                -self.max_history * 2 :
-            ]
+            self.sessions[session_id] = self.sessions[session_id][-self.max_history * 2:]
 
-    def add_exchange(self, session_id: str, user_message: str, assistant_message: str):
-        """Add a complete question-answer exchange"""
-        self.add_message(session_id, "user", user_message)
-        self.add_message(session_id, "assistant", assistant_message)
-
-    def get_conversation_history(self, session_id: Optional[str]) -> Optional[str]:
-        """Get formatted conversation history for a session"""
+    def get_conversation_history(self, session_id: Optional[str]) -> Optional[List[dict]]:
+        """Get conversation history as a list of message dicts for the API"""
         if not session_id or session_id not in self.sessions:
             return None
-
         messages = self.sessions[session_id]
-        if not messages:
-            return None
-
-        # Format messages for context
-        formatted_messages = []
-        for msg in messages:
-            formatted_messages.append(f"{msg.role.title()}: {msg.content}")
-
-        return "\n".join(formatted_messages)
+        return messages if messages else None
 
     def clear_session(self, session_id: str):
         """Clear all messages from a session"""

@@ -1,8 +1,8 @@
 """
 Simplified AI Generator - Passes full profile in system prompt
-No tools, no vector search, just direct context
+Uses Anthropic prompt caching to avoid re-processing the static profile on every request.
 """
-from typing import Optional
+from typing import List, Optional
 
 import anthropic
 
@@ -47,18 +47,22 @@ COMPLETE PROFESSIONAL PROFILE:
         self.client = anthropic.Anthropic(api_key=api_key)
         self.model = model
 
-        # Build complete system prompt with profile
-        self.system_prompt = f"{self.BASE_SYSTEM_PROMPT}\n\n{profile_context}"
+        self.system_prompt_text = f"{self.BASE_SYSTEM_PROMPT}\n\n{profile_context}"
 
-        # Check token count (approximately)
-        token_estimate = len(self.system_prompt.split())
-        print(f"📊 System prompt size: ~{token_estimate} words (~{int(token_estimate * 1.3)} tokens)")
+        # Use structured system with cache_control on the large static profile block
+        # Requires >= 1024 tokens to cache; our profile is ~4000+ tokens so this qualifies.
+        # Cache TTL is 5 minutes — resets on each cache hit.
+        self.system_prompt = [
+            {
+                "type": "text",
+                "text": self.system_prompt_text,
+                "cache_control": {"type": "ephemeral"},
+            }
+        ]
 
-        # Claude can handle up to 200k context, so even 10k words is fine
-        if token_estimate > 150000:
-            print("⚠️  Warning: System prompt is very large and may impact performance")
+        token_estimate = len(self.system_prompt_text.split())
+        print(f"📊 System prompt size: ~{token_estimate} words (~{int(token_estimate * 1.3)} tokens) [prompt caching enabled]")
 
-        # Base API parameters
         self.base_params = {
             "model": self.model,
             "temperature": 0,
@@ -66,36 +70,31 @@ COMPLETE PROFESSIONAL PROFILE:
         }
 
     def generate_response(
-        self, query: str, conversation_history: Optional[str] = None
+        self, query: str, conversation_history: Optional[List[dict]] = None
     ) -> str:
         """
-        Generate AI response with full profile context
-
-        Args:
-            query: The user's question or request
-            conversation_history: Previous messages for context
-
-        Returns:
-            Generated response as string
+        Generate AI response with full profile context.
+        The system prompt (profile) is cached after the first request —
+        subsequent requests within 5 minutes skip re-processing it.
         """
-        # Add conversation history to system prompt if provided
-        system_content = self.system_prompt
-        if conversation_history:
-            system_content = (
-                f"{self.system_prompt}\n\n"
-                f"--- Previous Conversation ---\n{conversation_history}\n"
-                f"--- End Previous Conversation ---\n\n"
-                f"Continue the conversation naturally, referring back to previous exchanges when relevant."
-            )
+        messages = list(conversation_history) if conversation_history else []
+        messages.append({"role": "user", "content": query})
 
-        # Build messages
-        messages = [{"role": "user", "content": query}]
-
-        # Make API call
         try:
             response = self.client.messages.create(
-                **self.base_params, messages=messages, system=system_content
+                **self.base_params,
+                messages=messages,
+                system=self.system_prompt,
             )
+
+            # Log cache performance
+            usage = response.usage
+            cache_read = getattr(usage, 'cache_read_input_tokens', 0)
+            cache_write = getattr(usage, 'cache_creation_input_tokens', 0)
+            if cache_read:
+                print(f"✅ Prompt cache HIT: {cache_read} tokens read from cache")
+            elif cache_write:
+                print(f"📝 Prompt cache WRITE: {cache_write} tokens cached")
 
             return response.content[0].text
 
