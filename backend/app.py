@@ -30,7 +30,7 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
-# Initialize RAG system
+# Initialize RAG system (full profile in context)
 rag_system = RAGSystem(config)
 
 
@@ -116,28 +116,8 @@ async def clear_session(request: ClearSessionRequest):
 
 @app.on_event("startup")
 async def startup_event():
-    """Load initial profile documents on startup"""
-    print("Loading profile documents...")
-    try:
-        # Load profile file from root directory
-        profile_files = [
-            "../yuanyuan_li_profile.json",
-        ]
-        total_sections = 0
-        total_chunks = 0
-        for file_path in profile_files:
-            if os.path.exists(file_path):
-                sections, chunks = rag_system.add_profile_document(file_path)
-                total_sections += sections
-                total_chunks += chunks
-                print(
-                    f"Loaded {os.path.basename(file_path)}: {sections} sections, {chunks} chunks"
-                )
-        print(
-            f"✓ Total profile data loaded: {total_sections} sections with {total_chunks} chunks"
-        )
-    except Exception as e:
-        print(f"Error loading profile documents: {e}")
+    """Profile is loaded automatically in RAGSystem.__init__()"""
+    print("✅ RAG system ready (profile loaded in context)")
 
 
 # Custom static file handler with no-cache headers for development

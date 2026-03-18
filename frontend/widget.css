@@ -5,40 +5,40 @@
     padding: 0;
 }
 
-/* CSS Variables - Dark Theme (Default) */
+/* CSS Variables - Dark Theme (Default) - Matching yuanyuanli.com */
 :root {
-    --primary-color: #2563eb;
-    --primary-hover: #1d4ed8;
-    --background: #0f172a;
-    --surface: #1e293b;
-    --surface-hover: #334155;
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --border-color: #334155;
-    --user-message: #2563eb;
-    --assistant-message: #374151;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    --primary-color: #e74c3c;
+    --primary-hover: #c0392b;
+    --background: #2d2d2d;
+    --surface: #3a3a3a;
+    --surface-hover: #4a4a4a;
+    --text-primary: #ffffff;
+    --text-secondary: #999999;
+    --border-color: #4a4a4a;
+    --user-message: #e74c3c;
+    --assistant-message: #3a3a3a;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
     --radius: 12px;
-    --focus-ring: rgba(37, 99, 235, 0.2);
+    --focus-ring: rgba(231, 76, 60, 0.3);
 }
 
 /* Light Theme Variables */
 [data-theme="light"] {
-    --primary-color: #2563eb;
-    --primary-hover: #1d4ed8;
+    --primary-color: #e74c3c;
+    --primary-hover: #c0392b;
     --background: #ffffff;
-    --surface: #f8fafc;
-    --surface-hover: #e2e8f0;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --border-color: #e2e8f0;
-    --user-message: #2563eb;
-    --assistant-message: #f1f5f9;
+    --surface: #f8f8f8;
+    --surface-hover: #e0e0e0;
+    --text-primary: #2d2d2d;
+    --text-secondary: #666666;
+    --border-color: #d0d0d0;
+    --user-message: #e74c3c;
+    --assistant-message: #f5f5f5;
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.05);
     --radius: 12px;
-    --focus-ring: rgba(37, 99, 235, 0.2);
+    --focus-ring: rgba(231, 76, 60, 0.2);
 }
 
 /* Base Styles */
@@ -65,7 +65,7 @@ body {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
     border: none;
     color: white;
     cursor: pointer;
@@ -176,7 +176,7 @@ body {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
     display: flex;
     align-items: center;
     justify-content: center;

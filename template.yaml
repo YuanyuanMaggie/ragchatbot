@@ -1,0 +1,134 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Yuanyuan Li RAG Chatbot
+  Full profile in context, cost-protected deployment
+
+Parameters:
+  AnthropicApiKey:
+    Type: String
+    NoEcho: true
+    Description: Anthropic API Key for Claude
+
+Resources:
+  # Lambda Function (simplified - no S3 needed)
+  ChatbotFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-function'
+      CodeUri: backend/
+      Handler: lambda_handler.handler
+      Runtime: python3.13
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      # IMPORTANT: Limit concurrent executions to prevent cost spikes
+      ReservedConcurrentExecutions: 10
+      Environment:
+        Variables:
+          ANTHROPIC_API_KEY: !Ref AnthropicApiKey
+          PYTHONUNBUFFERED: '1'
+      Policies:
+        # Only CloudWatch Logs needed (no S3)
+        - CloudWatchLogsFullAccess
+      Events:
+        # API Gateway integration
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+            RestApiId: !Ref ChatbotApi
+
+  # API Gateway with Usage Plan and Quota
+  ChatbotApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      # CORS configuration for your website
+      Cors:
+        AllowOrigin: "'https://yuanyuanli.com'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-api-key'"
+        AllowMethods: "'GET,POST,OPTIONS'"
+      # Require API key for all requests
+      Auth:
+        ApiKeyRequired: true
+        # Usage plan with free tier limits
+        UsagePlan:
+          CreateUsagePlan: PER_API
+          UsagePlanName: FreeTierProtection
+          # Hard limit: 900k requests/month (under 1M free tier)
+          Quota:
+            Limit: 900000
+            Period: MONTH
+          # Throttle: 10 req/sec to prevent abuse
+          Throttle:
+            RateLimit: 10
+            BurstLimit: 20
+
+  # CloudWatch Alarm: Alert when approaching daily limit
+  HighRequestAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-high-requests'
+      AlarmDescription: Alert when daily requests exceed 30k (900k/month pace)
+      MetricName: Count
+      Namespace: AWS/ApiGateway
+      Statistic: Sum
+      Period: 86400  # 1 day
+      EvaluationPeriods: 1
+      Threshold: 30000  # 30k requests/day
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: ApiName
+          Value: !Ref ChatbotApi
+      TreatMissingData: notBreaching
+
+  # CloudWatch Alarm: Alert on Lambda errors
+  LambdaErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-errors'
+      AlarmDescription: Alert on Lambda function errors
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Statistic: Sum
+      Period: 300  # 5 minutes
+      EvaluationPeriods: 1
+      Threshold: 5  # More than 5 errors in 5 minutes
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref ChatbotFunction
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway endpoint URL (use this in widget.js)
+    Value: !Sub 'https://${ChatbotApi}.execute-api.${AWS::Region}.amazonaws.com/prod'
+    Export:
+      Name: !Sub '${AWS::StackName}-api-url'
+
+  ApiKeyId:
+    Description: API Key ID (run 'aws apigateway get-api-key --api-key <this-id> --include-value' to get the key)
+    Value: !GetAtt ChatbotApiApiKey.ApiKeyId
+    Export:
+      Name: !Sub '${AWS::StackName}-api-key-id'
+
+  UsagePlanId:
+    Description: Usage Plan ID (check quota usage with this)
+    Value: !Ref ChatbotApiUsagePlan
+    Export:
+      Name: !Sub '${AWS::StackName}-usage-plan-id'
+
+  FunctionName:
+    Description: Lambda function name
+    Value: !Ref ChatbotFunction
+
+  CostProtection:
+    Description: Cost protection summary
+    Value: 'Usage quota: 900k/month | Throttle: 10 req/sec | Reserved concurrency: 10'
+
+  ColdStartTime:
+    Description: Expected cold start time
+    Value: '~2 seconds (faster than ChromaDB version)'

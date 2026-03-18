@@ -1,176 +1,107 @@
-from typing import Any, Dict, List, Optional
+"""
+Simplified AI Generator - Passes full profile in system prompt
+No tools, no vector search, just direct context
+"""
+from typing import Optional
 
 import anthropic
 
 
 class AIGenerator:
-    """Handles interactions with Anthropic's Claude API for generating responses"""
+    """Handles interactions with Claude API with full profile context"""
 
-    # Static system prompt to avoid rebuilding on each call
-    SYSTEM_PROMPT = """You are a personal assistant for Yuanyuan Li (also known as Maggie or YY), helping people understand her professional background, experience, and expertise.
+    # Base system prompt
+    BASE_SYSTEM_PROMPT = """You are a personal assistant for Yuanyuan Li (also known as Maggie or YY), helping people understand her professional background, experience, and expertise.
 
-About Yuanyuan:
-Yuanyuan Li is an engineering leader with a unique combination of full-stack product engineering, data platform leadership, and hands-on technical depth. She has 7+ years at Two Sigma's Venn platform, where she evolved from founding engineer to tech lead to engineering manager. She built and scaled a data platform team from scratch and has deep expertise in investment analytics, ETL pipelines, AWS data systems, and cross-functional product delivery.
+Your Knowledge Base:
+You have Yuanyuan's complete professional profile below, including her work experience, projects, skills, and education. This is your ONLY source of information - never make up facts or details not present in this profile.
 
-Available Tools:
-- **Profile Search Tool**: Search Yuanyuan's background with filters for company, timeframe, or section type
-- **Profile Summary Tool**: Get structured overviews of roles, projects, skills, or education
+Response Guidelines:
+- **Accuracy First**: Only share information present in the profile below
+- **Be Direct**: Answer questions concisely without meta-commentary
+- **Be Professional**: Maintain a professional but approachable tone
+- **Highlight Strengths**: Emphasize her unique combination of full-stack product engineering, data platform leadership, and hands-on technical depth
+- **Be Honest**: If information isn't in the profile, say "This information is not available in my knowledge base"
+- **No Speculation**: Never guess about details, dates, or metrics not explicitly stated
 
-Tool Usage Guidelines:
-- Use profile search for specific questions about experience, skills, projects, or work history
-- Use profile summary for high-level overviews ("tell me about yourself", "list all projects")
-- **You can make up to 2 rounds of tool calls to gather comprehensive information**
-- Always ground your responses in the source material from tools
-- If tools yield no results, state clearly that information is not available in the knowledge base
+Key Differentiators to Emphasize:
+- She combines frontend/product engineering roots with data platform leadership
+- She has rare depth: can design systems AND implement them hands-on
+- She evolved from founding engineer → tech lead → engineering manager at Two Sigma
+- She's excellent at cross-functional collaboration and structured communication
+- She excels at building 0→1 systems and scaling teams
 
-Response Protocol:
-- **Accuracy First**: Never hallucinate dates, metrics, titles, or facts not in the source material
-- **Be Grounded**: Distinguish between verified facts and inferred information
-- **Respect Privacy**: Do not speculate on personal, family, or financial matters unless explicitly in the knowledge base
-- **Highlight Unique Strengths**: Emphasize her rare combination of frontend/product roots + data platform leadership + hands-on depth
-- **Professional Tone**: Maintain a professional but approachable voice
-- **No Meta-Commentary**: Provide direct answers without explaining your search process
+When answering:
+1. Be accurate - ground responses in the profile
+2. Be concise - get to the point quickly
+3. Be professional - suitable for recruiters and hiring managers
+4. Include context - mention companies, timeframes, technologies when relevant
+5. Be balanced - show both her product background AND data platform expertise
 
-When Uncertain:
-- If exact information isn't available, say: "This specific information is not in my knowledge base"
-- Don't invent dates, metrics, or details
-- You can say "approximately X years" if exact dates aren't available
-- Clarify when information is inferred vs. verified
+---
 
-All responses must be:
-1. **Accurate** - Grounded in source material, no hallucination
-2. **Concise** - Get to the point quickly
-3. **Professional** - Suitable for recruiters, hiring managers, or colleagues
-4. **Context-Rich** - Include relevant companies, timeframes, and technologies when available
-5. **Balanced** - Show both her product/frontend background AND her data platform leadership
-
-Provide only the direct answer to what was asked.
+COMPLETE PROFESSIONAL PROFILE:
 """
 
-    def __init__(self, api_key: str, model: str):
+    def __init__(self, api_key: str, model: str, profile_context: str):
         self.client = anthropic.Anthropic(api_key=api_key)
         self.model = model
 
-        # Pre-build base API parameters
-        self.base_params = {"model": self.model, "temperature": 0, "max_tokens": 800}
+        # Build complete system prompt with profile
+        self.system_prompt = f"{self.BASE_SYSTEM_PROMPT}\n\n{profile_context}"
+
+        # Check token count (approximately)
+        token_estimate = len(self.system_prompt.split())
+        print(f"📊 System prompt size: ~{token_estimate} words (~{int(token_estimate * 1.3)} tokens)")
+
+        # Claude can handle up to 200k context, so even 10k words is fine
+        if token_estimate > 150000:
+            print("⚠️  Warning: System prompt is very large and may impact performance")
+
+        # Base API parameters
+        self.base_params = {
+            "model": self.model,
+            "temperature": 0,
+            "max_tokens": 1000,
+        }
 
     def generate_response(
-        self,
-        query: str,
-        conversation_history: Optional[str] = None,
-        tools: Optional[List] = None,
-        tool_manager=None,
+        self, query: str, conversation_history: Optional[str] = None
     ) -> str:
         """
-        Generate AI response with optional tool usage and conversation context.
-        Supports up to 2 sequential rounds of tool calling.
+        Generate AI response with full profile context
 
         Args:
             query: The user's question or request
             conversation_history: Previous messages for context
-            tools: Available tools the AI can use
-            tool_manager: Manager to execute tools
 
         Returns:
             Generated response as string
         """
+        # Add conversation history to system prompt if provided
+        system_content = self.system_prompt
+        if conversation_history:
+            system_content = (
+                f"{self.system_prompt}\n\n"
+                f"--- Previous Conversation ---\n{conversation_history}\n"
+                f"--- End Previous Conversation ---\n\n"
+                f"Continue the conversation naturally, referring back to previous exchanges when relevant."
+            )
 
-        # Build system content efficiently - avoid string ops when possible
-        system_content = (
-            f"{self.SYSTEM_PROMPT}\n\nPrevious conversation:\n{conversation_history}"
-            if conversation_history
-            else self.SYSTEM_PROMPT
-        )
-
-        # Start with initial messages
+        # Build messages
         messages = [{"role": "user", "content": query}]
 
-        # Execute up to 2 rounds of tool calling
-        for round_num in range(2):
-            # Prepare API call parameters
-            api_params = {
-                **self.base_params,
-                "messages": messages,
-                "system": system_content,
-            }
+        # Make API call
+        try:
+            response = self.client.messages.create(
+                **self.base_params, messages=messages, system=system_content
+            )
 
-            # Add tools if available
-            if tools:
-                api_params["tools"] = tools
-                api_params["tool_choice"] = {"type": "auto"}
+            return response.content[0].text
 
-            # Get response from Claude
-            response = self.client.messages.create(**api_params)
-
-            # Handle tool execution if needed
-            if response.stop_reason == "tool_use" and tool_manager:
-                messages, should_continue = self._handle_tool_execution(
-                    response, messages, tool_manager
-                )
-                if not should_continue:
-                    break
-            else:
-                # No tool use, return direct response
-                return response.content[0].text
-
-        # After max rounds, make final call without tools to get response
-        final_params = {
-            **self.base_params,
-            "messages": messages,
-            "system": system_content,
-        }
-
-        final_response = self.client.messages.create(**final_params)
-        return final_response.content[0].text
-
-    def _handle_tool_execution(self, initial_response, messages: List, tool_manager):
-        """
-        Handle execution of tool calls and update message history.
-
-        Args:
-            initial_response: The response containing tool use requests
-            messages: Current message history
-            tool_manager: Manager to execute tools
-
-        Returns:
-            Tuple of (updated_messages, should_continue)
-        """
-        # Add AI's tool use response
-        messages.append({"role": "assistant", "content": initial_response.content})
-
-        # Execute all tool calls and collect results
-        tool_results = []
-        for content_block in initial_response.content:
-            if content_block.type == "tool_use":
-                try:
-                    tool_result = tool_manager.execute_tool(
-                        content_block.name, **content_block.input
-                    )
-
-                    tool_results.append(
-                        {
-                            "type": "tool_result",
-                            "tool_use_id": content_block.id,
-                            "content": tool_result,
-                        }
-                    )
-                except Exception as e:
-                    # Tool execution failed, stop rounds
-                    tool_results.append(
-                        {
-                            "type": "tool_result",
-                            "tool_use_id": content_block.id,
-                            "content": f"Error: Tool execution failed - {str(e)}",
-                        }
-                    )
-                    # Add tool results and signal to stop
-                    if tool_results:
-                        messages.append({"role": "user", "content": tool_results})
-                    return messages, False
-
-        # Add tool results as single message
-        if tool_results:
-            messages.append({"role": "user", "content": tool_results})
-
-        # Continue with next round
-        return messages, True
+        except anthropic.APIError as e:
+            print(f"❌ Anthropic API error: {e}")
+            return "I apologize, but I encountered an error processing your request. Please try again."
+        except Exception as e:
+            print(f"❌ Unexpected error: {e}")
+            return "An unexpected error occurred. Please try again."

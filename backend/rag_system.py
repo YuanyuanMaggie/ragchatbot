@@ -1,187 +1,259 @@
+"""
+Simplified RAG System - Loads full profile and passes to Claude
+No vector database, no complex chunking, just direct context
+"""
+import json
 import os
 from typing import Dict, List, Optional, Tuple
 
 from ai_generator import AIGenerator
-from models import ProfileChunk, ProfileSection
-from profile_document_processor import ProfileDocumentProcessor
-from profile_search_tools import ProfileSearchTool, ProfileSummaryTool
-from search_tools import ToolManager
 from session_manager import SessionManager
-from vector_store import VectorStore
 
 
 class RAGSystem:
-    """Main orchestrator for the Retrieval-Augmented Generation system"""
+    """Simplified orchestrator that passes full profile to Claude"""
 
     def __init__(self, config):
         self.config = config
+        self.profile_data = None
+        self.profile_text = None
 
-        # Initialize core components
-        self.profile_document_processor = ProfileDocumentProcessor(
-            chunk_size=700, chunk_overlap=100
-        )
-        self.vector_store = VectorStore(
-            config.CHROMA_PATH, config.EMBEDDING_MODEL, config.MAX_RESULTS
-        )
+        # Load profile on initialization
+        self._load_profile()
+
+        # Initialize components
         self.ai_generator = AIGenerator(
-            config.ANTHROPIC_API_KEY, config.ANTHROPIC_MODEL
+            api_key=config.ANTHROPIC_API_KEY,
+            model=config.ANTHROPIC_MODEL,
+            profile_context=self.profile_text,
         )
         self.session_manager = SessionManager(config.MAX_HISTORY)
 
-        # Initialize profile search tools
-        self.tool_manager = ToolManager()
-        self.profile_search_tool = ProfileSearchTool(self.vector_store)
-        self.profile_summary_tool = ProfileSummaryTool(self.vector_store)
+    def _load_profile(self):
+        """Load profile JSON and convert to text context for Claude"""
+        profile_path = self.config.PROFILE_PATH
 
-        # Register profile tools
-        self.tool_manager.register_tool(self.profile_search_tool)
-        self.tool_manager.register_tool(self.profile_summary_tool)
+        # Try multiple paths to find the profile
+        possible_paths = [
+            profile_path,
+            os.path.join(os.path.dirname(__file__), '..', 'yuanyuan_li_profile.json'),
+            'yuanyuan_li_profile.json',
+            '../yuanyuan_li_profile.json',
+        ]
+
+        actual_path = None
+        for path in possible_paths:
+            if os.path.exists(path):
+                actual_path = path
+                break
+
+        if not actual_path:
+            print(f"⚠️  Profile file not found. Tried: {possible_paths}")
+            self.profile_data = {}
+            self.profile_text = "No profile data available."
+            return
+
+        profile_path = actual_path
+
+        try:
+            with open(profile_path, "r", encoding="utf-8") as f:
+                self.profile_data = json.load(f)
+
+            # Convert JSON to readable text for Claude
+            self.profile_text = self._format_profile_for_claude(self.profile_data)
+
+            print(
+                f"✅ Loaded profile: {len(self.profile_text)} characters, {len(self.profile_text.split())} words"
+            )
+
+        except Exception as e:
+            print(f"❌ Error loading profile: {e}")
+            self.profile_data = {}
+            self.profile_text = "Error loading profile data."
+
+    def _format_profile_for_claude(self, data: dict) -> str:
+        """
+        Convert profile JSON to well-formatted text for Claude's context
+
+        This creates a readable narrative that Claude can easily understand
+        """
+        lines = []
+
+        # Header
+        lines.append("# YUANYUAN LI - PROFESSIONAL PROFILE")
+        lines.append("=" * 50)
+        lines.append("")
+
+        # Basic info
+        profile = data.get("profile", {})
+        if profile:
+            lines.append(f"Name: {profile.get('name', 'Yuanyuan Li')}")
+            lines.append(f"Also Known As: {', '.join(profile.get('also_known_as', []))}")
+            lines.append(f"Headline: {profile.get('headline', '')}")
+            lines.append(f"Location: {profile.get('location', '')}")
+            lines.append("")
+            lines.append(f"## Summary")
+            lines.append(profile.get('summary', ''))
+            lines.append("")
+            lines.append(f"## Executive Summary")
+            lines.append(profile.get('executive_summary', ''))
+            lines.append("")
+
+        # Canonical story
+        canonical = data.get("canonical_story", {})
+        if canonical:
+            lines.append("## Professional Story")
+            lines.append("-" * 50)
+            lines.append(canonical.get("narrative", ""))
+            lines.append("")
+
+        # Work experience (roles)
+        roles = data.get("roles", [])
+        if roles:
+            lines.append("## Work Experience")
+            lines.append("-" * 50)
+            for role in roles:
+                lines.append(f"\n### {role.get('title', 'Role')} at {role.get('company', 'Company')}")
+                lines.append(f"Duration: {role.get('duration', 'N/A')}")
+                lines.append(f"Timeframe: {role.get('timeframe', 'N/A')}")
+                lines.append(f"Location: {role.get('location', 'N/A')}")
+                lines.append("")
+                lines.append(role.get('description', ''))
+                lines.append("")
+
+                # Key achievements
+                achievements = role.get('key_achievements', [])
+                if achievements:
+                    lines.append("**Key Achievements:**")
+                    for achievement in achievements:
+                        lines.append(f"- {achievement}")
+                    lines.append("")
+
+                # Technologies
+                tech = role.get('technologies_used', [])
+                if tech:
+                    lines.append(f"**Technologies:** {', '.join(tech)}")
+                    lines.append("")
+
+        # Projects
+        projects = data.get("projects", [])
+        if projects:
+            lines.append("\n## Key Projects")
+            lines.append("-" * 50)
+            for project in projects:
+                lines.append(f"\n### {project.get('name', 'Project')}")
+                lines.append(f"Company: {project.get('company', 'N/A')}")
+                lines.append(f"Timeframe: {project.get('timeframe', 'N/A')}")
+                lines.append(f"Role: {project.get('role', 'N/A')}")
+                lines.append("")
+                lines.append(project.get('description', ''))
+                lines.append("")
+
+                outcomes = project.get('outcomes', [])
+                if outcomes:
+                    lines.append("**Outcomes:**")
+                    for outcome in outcomes:
+                        lines.append(f"- {outcome}")
+                    lines.append("")
+
+                tech = project.get('technologies', [])
+                if tech:
+                    lines.append(f"**Technologies:** {', '.join(tech)}")
+                    lines.append("")
+
+        # Skills
+        skills = data.get("skills", {})
+        if skills:
+            lines.append("\n## Skills & Expertise")
+            lines.append("-" * 50)
+            for category, skill_list in skills.items():
+                if isinstance(skill_list, list):
+                    lines.append(f"\n### {category}")
+                    for skill in skill_list:
+                        if isinstance(skill, dict):
+                            name = skill.get('name', '')
+                            proficiency = skill.get('proficiency', '')
+                            lines.append(f"- **{name}** ({proficiency})")
+                        else:
+                            lines.append(f"- {skill}")
+                    lines.append("")
+
+        # Education
+        education = data.get("education", [])
+        if education:
+            lines.append("\n## Education")
+            lines.append("-" * 50)
+            for edu in education:
+                lines.append(f"\n### {edu.get('degree', 'Degree')}")
+                lines.append(f"Institution: {edu.get('institution', 'N/A')}")
+                lines.append(f"Year: {edu.get('year', 'N/A')}")
+                field = edu.get('field_of_study')
+                if field:
+                    lines.append(f"Field: {field}")
+                lines.append("")
+
+        return "\n".join(lines)
 
     def query(
         self, query: str, session_id: Optional[str] = None
     ) -> Tuple[str, List[str], List[str]]:
         """
-        Process a user query using the RAG system with tool-based search.
+        Process a user query with full profile context
 
         Args:
             query: User's question
-            session_id: Optional session ID for conversation context
+            session_id: Optional session ID for conversation history
 
         Returns:
-            Tuple of (response, sources list, source_links list)
+            Tuple of (response, sources, source_links)
         """
-        # Create prompt for the AI - the system prompt handles context
-        prompt = query
-
         # Get conversation history if session exists
         history = None
         if session_id:
             history = self.session_manager.get_conversation_history(session_id)
 
-        # Generate response using AI with tools
+        # Generate response with full profile context
         response = self.ai_generator.generate_response(
-            query=prompt,
-            conversation_history=history,
-            tools=self.tool_manager.get_tool_definitions(),
-            tool_manager=self.tool_manager,
+            query=query, conversation_history=history
         )
-
-        # Get sources and source links from the search tool
-        sources = self.tool_manager.get_last_sources()
-        source_links = self.tool_manager.get_last_source_links()
-
-        # Reset sources after retrieving them
-        self.tool_manager.reset_sources()
 
         # Update conversation history
         if session_id:
             self.session_manager.add_exchange(session_id, query, response)
 
-        # Return response with sources and links from tool searches
+        # Return response (no specific sources - all of profile is the source)
+        sources = ["Yuanyuan Li's Professional Profile"]
+        source_links = []
+
         return response, sources, source_links
 
-    def add_profile_document(self, file_path: str) -> Tuple[int, int]:
-        """
-        Add a single profile document (Markdown or JSON) to the knowledge base.
-
-        Args:
-            file_path: Path to the profile document
-
-        Returns:
-            Tuple of (number of sections created, number of chunks created)
-        """
-        try:
-            # Process the document
-            sections, chunks = self.profile_document_processor.process_profile_document(
-                file_path
-            )
-
-            # Add profile sections to vector store for semantic search
-            for section in sections:
-                self.vector_store.add_profile_section(section)
-
-            # Add profile content chunks to vector store
-            self.vector_store.add_profile_content(chunks)
-
-            return len(sections), len(chunks)
-        except Exception as e:
-            print(f"Error processing profile document {file_path}: {e}")
-            return 0, 0
-
-    def add_profile_folder(
-        self, folder_path: str, clear_existing: bool = False
-    ) -> Tuple[int, int]:
-        """
-        Add all profile documents from a folder.
-
-        Args:
-            folder_path: Path to folder containing profile documents
-            clear_existing: Whether to clear existing profile data first
-
-        Returns:
-            Tuple of (total sections added, total chunks created)
-        """
-        total_sections = 0
-        total_chunks = 0
-
-        # Clear existing data if requested
-        if clear_existing:
-            print("Clearing existing profile data for fresh rebuild...")
-            self.vector_store.clear_profile_data()
-
-        if not os.path.exists(folder_path):
-            print(f"Folder {folder_path} does not exist")
-            return 0, 0
-
-        # Process each file in the folder
-        for file_name in os.listdir(folder_path):
-            file_path = os.path.join(folder_path, file_name)
-            if os.path.isfile(file_path) and file_name.lower().endswith(
-                (".md", ".json")
-            ):
-                try:
-                    sections, chunks = self.add_profile_document(file_path)
-                    total_sections += sections
-                    total_chunks += chunks
-                    print(
-                        f"Added profile document: {file_name} ({sections} sections, {chunks} chunks)"
-                    )
-                except Exception as e:
-                    print(f"Error processing {file_name}: {e}")
-
-        return total_sections, total_chunks
-
     def get_profile_analytics(self) -> Dict:
-        """Get analytics about the profile knowledge base"""
-        all_sections = self.vector_store.get_all_profile_sections()
+        """Get analytics about the profile"""
+        if not self.profile_data:
+            return {
+                "total_sections": 0,
+                "section_types": [],
+                "key_highlights": ["Profile not loaded"],
+            }
 
-        # Count sections by type
-        section_counts = {}
-        for section in all_sections:
-            stype = section.get("section_type", "general")
-            section_counts[stype] = section_counts.get(stype, 0) + 1
+        # Count sections
+        role_count = len(self.profile_data.get("roles", []))
+        project_count = len(self.profile_data.get("projects", []))
+        skill_categories = len(self.profile_data.get("skills", {}))
+        education_count = len(self.profile_data.get("education", []))
 
-        # Get key highlights
         highlights = []
-
-        # Add role count
-        role_count = section_counts.get("role", 0)
         if role_count > 0:
             highlights.append(f"{role_count} work experience entries")
-
-        # Add project count
-        project_count = section_counts.get("project", 0)
         if project_count > 0:
             highlights.append(f"{project_count} key projects")
-
-        # Add skill categories
-        skill_count = section_counts.get("skill", 0)
-        if skill_count > 0:
-            highlights.append(f"{skill_count} skill categories")
+        if skill_categories > 0:
+            highlights.append(f"{skill_categories} skill categories")
+        if education_count > 0:
+            highlights.append(f"{education_count} education entries")
 
         return {
-            "total_sections": len(all_sections),
-            "section_types": list(section_counts.keys()),
-            "section_counts": section_counts,
+            "total_sections": role_count + project_count + skill_categories + education_count,
+            "section_types": ["roles", "projects", "skills", "education"],
             "key_highlights": highlights,
         }

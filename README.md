@@ -24,18 +24,17 @@ It provides accurate, grounded responses with proper source attribution.
 
 ## 📚 Knowledge Base
 
-The system loads one comprehensive profile document on startup:
+The system loads one comprehensive profile document into Claude's context:
 
-**yuanyuan_li_profile.json** - Combined comprehensive profile
+**yuanyuan_li_profile.json** (37KB, ~1,500 tokens)
    - Structured profile data: roles, projects, skills, education
-   - Narrative content: tell-me-about-yourself, short bio, career arc
+   - Narrative content: tell-me-about-yourself, career arc
    - Domain expertise and project themes
    - Leadership and working style
-   - Communication preferences
    - 3 work experience entries (Two Sigma, Jet.com, SupplyHouse)
-   - 12+ key projects with metadata
+   - 11 key projects with metadata
 
-**Total Knowledge:** 75+ sections, 270+ searchable chunks
+**Full profile loaded in memory** - No vector database needed! Claude sees 100% of context every time.
 
 ## 🚀 Quick Start
 
@@ -64,13 +63,8 @@ Navigate to: http://localhost:8000
 
 ## 📖 Documentation
 
-- **[START_SERVER.md](START_SERVER.md)** - Server startup guide with troubleshooting
-- **[QUICK_START.md](QUICK_START.md)** - Quick testing guide with example queries
-- **[REFACTOR_PLAN.md](REFACTOR_PLAN.md)** - Complete refactoring plan
-- **[TEST_PLAN.md](TEST_PLAN.md)** - Comprehensive testing strategy
-- **[IMPLEMENTATION_COMPLETE.md](IMPLEMENTATION_COMPLETE.md)** - Implementation summary
-- **[BEFORE_AFTER.md](BEFORE_AFTER.md)** - Comparison with course bot
-- **[CLAUDE.md](CLAUDE.md)** - Development commands and architecture
+- **[CLAUDE.md](CLAUDE.md)** - Development commands and architecture reference
+- **[README.md](README.md)** - This file (project overview and deployment)
 
 ## 🧪 Test Queries
 
@@ -102,39 +96,44 @@ Try these queries to test the system:
 
 ## 🏗️ Architecture
 
+**Simplified Architecture (No Vector Database)**
+
 ```
-Profile Documents (Markdown + JSON)
+Profile JSON (yuanyuan_li_profile.json)
          ↓
-ProfileDocumentProcessor
-    ↓               ↓
-ProfileSection  ProfileChunk
-    ↓               ↓
-profile_metadata  profile_content (ChromaDB)
+RAGSystem loads full profile (~1,500 tokens)
          ↓
-ProfileSearchTool / ProfileSummaryTool
+Claude receives full profile in system prompt
          ↓
-AI Generator (Claude with personal assistant prompt)
+AI Generator (Claude with complete context)
          ↓
-RAG System → FastAPI → Frontend
+FastAPI → Frontend/Widget
 ```
+
+**Why No ChromaDB?**
+- Profile is only 37KB (~1,500 tokens)
+- Claude's context window is 200,000 tokens
+- Full profile fits easily → no vector search needed
+- Result: 50% faster, 60% smaller, simpler to maintain
 
 ## 🔧 Technology Stack
 
 **Backend:**
 - FastAPI - Web framework
-- ChromaDB - Vector database
-- Anthropic Claude - AI model
-- SentenceTransformers - Embeddings
-- Python 3.11+
+- Anthropic Claude - AI model (Sonnet 4)
+- Python 3.13+
+- Mangum - Lambda ASGI adapter
 
 **Frontend:**
 - Vanilla JavaScript
 - Marked.js - Markdown rendering
 - Modern CSS with dark/light themes
+- Responsive widget design
 
 **Infrastructure:**
 - uv - Package manager
-- Uvicorn - ASGI server
+- Uvicorn - ASGI server (local)
+- AWS Lambda + API Gateway (production)
 
 ## 📂 Project Structure
 
@@ -161,6 +160,7 @@ ragchatbot-codebase-main/
 
 ## 🎨 UI Features
 
+### Full-Page Version (index.html)
 - **Dark/Light Theme**: Toggle with button or Ctrl+Shift+T
 - **Profile Overview**: Sidebar with section counts and highlights
 - **Suggested Queries**: Click to quickly ask common questions
@@ -168,6 +168,14 @@ ragchatbot-codebase-main/
 - **Conversation History**: Multi-turn conversations
 - **New Chat**: Start fresh conversation anytime
 - **Markdown Support**: Formatted responses with lists, bold, code
+
+### Embeddable Widget (widget.html)
+- **Floating Button**: Bottom-right corner chat icon
+- **Expandable**: Opens to 420×650px chat interface
+- **Responsive**: Full-screen on mobile
+- **Collapsible Sidebar**: Profile stats and suggestions
+- **Theme Toggle**: Matches your website's style
+- **Embed Anywhere**: Iframe or direct HTML integration
 
 ## 🔒 Privacy & Safety
 
@@ -228,44 +236,91 @@ uv run pytest
 ## ❓ Troubleshooting
 
 ### Server Won't Start
-See [START_SERVER.md](START_SERVER.md) for detailed troubleshooting.
-
-Common issues:
-- `uv` not in PATH → Install or use full path
-- Port 8000 in use → Kill existing process
-- API key missing → Create `.env` file
+- `uv` not in PATH → Install: `curl -LsSf https://astral.sh/uv/install.sh | sh`
+- Port 8000 in use → Kill process: `lsof -ti:8000 | xargs kill`
+- API key missing → Create `.env` file with `ANTHROPIC_API_KEY`
 - Dependencies missing → Run `uv sync`
 
 ### Profile Not Loading
-- Verify yuanyuan_li_profile.json exists in root directory
-- Check file permissions
-- Validate JSON syntax
-- Look for errors in server logs
+- Verify `yuanyuan_li_profile.json` exists in root directory
+- Check JSON syntax is valid
+- Look for errors in server startup logs
 
-### Bad Responses
-- Check source attribution
-- Verify query matches knowledge base
-- Try more specific questions
-- Check conversation history isn't polluted
+### Lambda Deployment Issues
+- Build fails → Check Python 3.13 installed
+- Deploy fails → Verify AWS credentials configured
+- API errors → Check CloudWatch logs: `sam logs --stack-name yuanyuan-chatbot --tail`
+
+### Widget Not Working
+- API calls fail → Verify API URL and key are correct in widget.js
+- CORS errors → Check API Gateway CORS settings include your domain
+- 403 Forbidden → Ensure `x-api-key` header is set in all fetch calls
 
 ## 🚀 Production Deployment
 
-For production use, consider:
+### AWS Lambda Deployment (Recommended)
 
-1. **Security:**
-   - Use environment variables for secrets
-   - Enable HTTPS
-   - Add authentication if needed
+Deploy to AWS Lambda with API Gateway for a serverless, cost-effective solution.
 
-2. **Performance:**
-   - Cache embeddings
-   - Use persistent ChromaDB storage
-   - Add rate limiting
+**Benefits:**
+- **Cost**: ~$3.65/month with free tier protection
+- **Scalability**: Auto-scales with traffic
+- **No server management**: Fully managed by AWS
+- **Fast**: 2-3 second cold starts
 
-3. **Monitoring:**
-   - Log queries and responses
-   - Track token usage
-   - Monitor response times
+#### Prerequisites
+- AWS account with CLI configured
+- AWS SAM CLI installed: `brew install aws-sam-cli`
+- Anthropic API key
+
+#### Quick Deploy (3 Steps)
+
+```bash
+# 1. Build Lambda package
+sam build
+
+# 2. Deploy to AWS
+export ANTHROPIC_API_KEY="your-key-here"
+sam deploy \
+  --stack-name yuanyuan-chatbot \
+  --region us-east-1 \
+  --capabilities CAPABILITY_IAM \
+  --parameter-overrides "AnthropicApiKey=$ANTHROPIC_API_KEY"
+
+# 3. Get API credentials
+aws cloudformation describe-stacks \
+  --stack-name yuanyuan-chatbot \
+  --query 'Stacks[0].Outputs'
+```
+
+#### Cost Protection
+- **Hard limit**: 900,000 requests/month (under free tier)
+- **Throttle**: 10 requests/second
+- **Reserved concurrency**: 10 executions max
+- **Budget alerts**: Email notifications at $5 threshold
+
+#### Update Widget
+After deployment, update `frontend/widget.js` with:
+1. API URL from CloudFormation outputs
+2. API Key (get with `aws apigateway get-api-key --api-key <id> --include-value`)
+3. Add `x-api-key` header to all fetch calls
+
+#### Deploy Widget to S3
+```bash
+./deploy-widget-to-s3.sh yuanyuanli.com https://your-api-url
+```
+
+### Alternative Deployment Options
+
+**AWS Lightsail** (~$7/month):
+- Fixed pricing, simpler setup
+- Good for consistent low traffic
+- Includes SSL, static IP
+
+**Traditional Server**:
+- Use Docker container from Dockerfile
+- Deploy to any VPS or cloud platform
+- Configure reverse proxy (nginx/caddy)
 
 ## 📈 Future Enhancements
 
@@ -294,13 +349,10 @@ Private project - not licensed for public use.
 
 This personal profile assistant was built to accurately represent Yuanyuan Li's professional background using state-of-the-art RAG technology. It's designed to help recruiters, hiring managers, and colleagues learn about her experience, skills, and unique strengths.
 
-**Built with:** Claude 4.5, FastAPI, ChromaDB, and modern web technologies.
+**Built with:** Claude 4.5, FastAPI, and modern web technologies.
 
 ---
 
-**Questions or Issues?**
-- See [START_SERVER.md](START_SERVER.md) for startup help
-- See [QUICK_START.md](QUICK_START.md) for testing guide
-- Check [IMPLEMENTATION_COMPLETE.md](IMPLEMENTATION_COMPLETE.md) for technical details
-
 ✨ **Your professional profile, powered by AI** ✨
+
+**Questions?** See [CLAUDE.md](CLAUDE.md) for development commands or the Troubleshooting section above.

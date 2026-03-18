@@ -15,9 +15,6 @@ venv/
 env/
 ENV/
 
-# ChromaDB
-backend/chroma_db/
-
 # Uploads
 uploads/
 
