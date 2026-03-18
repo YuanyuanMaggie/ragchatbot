@@ -622,7 +622,8 @@
       "Ownership-oriented",
       "Collaborative",
       "Product-minded"
-    ]
+    ],
+    "leadership_style_narrative": "My leadership style is rooted in servant leadership—I see my role as supporting my team so they can do their best work, rather than controlling how they do it. In practice, that means I focus on removing blockers quickly, whether they're technical, organizational, or cross-team dependencies, so engineers can stay focused and productive. I also try to shield the team from unnecessary noise, like shifting priorities or distractions, so they have the space for deep work. At the same time, I place a strong emphasis on growth and well-being. I invest in regular 1:1s, help team members develop their skills and careers, and make sure the workload is sustainable. I've found that when engineers feel supported and trusted, they naturally take more ownership and deliver stronger results."
   },
   "working_style": {
     "characteristics": [
@@ -963,6 +964,10 @@
     {
       "question": "What makes you different from typical data engineering managers?",
       "answer_source": "executive_summary + career_arc + portfolio_projects"
+    },
+    {
+      "question": "Describe your leadership style",
+      "answer_source": "leadership_profile.leadership_style_narrative"
     }
   ],
   "open_questions_for_improvement": [
