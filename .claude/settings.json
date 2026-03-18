@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/yuanyuanli/iCloud Drive \\(Archive\\)/Desktop/Desktop - yuanyuan's MacBook Pro \\(2\\)/coding/ragchatbot/**)",
+      "Read(//Users/yuanyuanli/iCloud Drive \\(Archive\\)/Desktop/Desktop - yuanyuan''''s MacBook Pro \\(2\\)/coding/**)",
+      "Bash(aws sts:*)",
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(g[''''logGroupName'''']\\) for g in data[''''logGroups'''']]\")",
+      "Read(//Users/yuanyuanli/iCloud Drive \\(Archive\\)/Desktop/Desktop - yuanyuan''s MacBook Pro \\(2\\)/coding/ragchatbot/**)",
+      "Bash(ls \"/Users/yuanyuanli/iCloud Drive \\(Archive\\)/Desktop/Desktop - yuanyuan''s MacBook Pro \\(2\\)/coding/ragchatbot/\")",
+      "Bash(find \"/Users/yuanyuanli/iCloud Drive \\(Archive\\)/Desktop/Desktop - yuanyuan''s MacBook Pro \\(2\\)/coding/ragchatbot/\" -name \"app.py\")"
+    ]
+  }
+}

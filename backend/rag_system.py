@@ -35,6 +35,7 @@ class RAGSystem:
 
         # Try multiple paths to find the profile
         possible_paths = [
+            os.path.join(os.path.dirname(__file__), 'yuanyuan_li_profile.json'),
             profile_path,
             os.path.join(os.path.dirname(__file__), '..', 'yuanyuan_li_profile.json'),
             'yuanyuan_li_profile.json',

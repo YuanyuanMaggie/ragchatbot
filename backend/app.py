@@ -23,11 +23,10 @@ app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
 # Enable CORS with proper settings for proxy
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["*"],
+    allow_origins=["https://yuanyuanli.com", "http://localhost:3000"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "x-api-key"],
 )
 
 # Initialize RAG system (full profile in context)
@@ -132,5 +131,7 @@ class DevStaticFiles(StaticFiles):
         return response
 
 
-# Serve static files for the frontend
-app.mount("/", StaticFiles(directory="../frontend", html=True), name="static")
+# Serve static files for the frontend (local dev only - not in Lambda)
+import os as _os
+if _os.path.isdir("../frontend"):
+    app.mount("/", StaticFiles(directory="../frontend", html=True), name="static")

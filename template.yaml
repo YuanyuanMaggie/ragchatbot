@@ -40,6 +40,8 @@ Resources:
             Path: /{proxy+}
             Method: ANY
             RestApiId: !Ref ChatbotApi
+            Auth:
+              ApiKeyRequired: true
 
   # API Gateway with Usage Plan and Quota
   ChatbotApi:
@@ -48,12 +50,11 @@ Resources:
       StageName: prod
       # CORS configuration for your website
       Cors:
-        AllowOrigin: "'https://yuanyuanli.com'"
+        AllowOrigin: "'*'"
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-api-key'"
         AllowMethods: "'GET,POST,OPTIONS'"
       # Require API key for all requests
       Auth:
-        ApiKeyRequired: true
         # Usage plan with free tier limits
         UsagePlan:
           CreateUsagePlan: PER_API
@@ -68,6 +69,49 @@ Resources:
             BurstLimit: 20
 
   # CloudWatch Alarm: Alert when approaching daily limit
+
+  # CORS headers on API Gateway error responses (403, 429, 5xx)
+  GatewayResponseDefault4XX:
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseType: DEFAULT_4XX
+      RestApiId: !Ref ChatbotApi
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-api-key'"
+        gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+
+  GatewayResponseDefault5XX:
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseType: DEFAULT_5XX
+      RestApiId: !Ref ChatbotApi
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-api-key'"
+        gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+
+
+  GatewayResponseMissingAuthToken:
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseType: MISSING_AUTHENTICATION_TOKEN
+      RestApiId: !Ref ChatbotApi
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-api-key'"
+        gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+
+  GatewayResponseAccessDenied:
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseType: ACCESS_DENIED
+      RestApiId: !Ref ChatbotApi
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-api-key'"
+        gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+
   HighRequestAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:

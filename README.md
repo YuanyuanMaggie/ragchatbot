@@ -336,3 +336,7 @@ This personal profile assistant was built to accurately represent Yuanyuan Li's 
 ✨ **Your professional profile, powered by AI** ✨
 
 **Questions?** See [CLAUDE.md](CLAUDE.md) for development commands or the Troubleshooting section above.
+
+## Debug
+
+aws logs tail /aws/lambda/yuanyuan-chatbot-function --region us-east-1 --since 1h 2>&1 | tail -100
