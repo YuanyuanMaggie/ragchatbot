@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Yuanyuan Li - Chat Widget</title>
+    <link rel="stylesheet" href="widget.css">
+</head>
+<body>
+    <!-- Floating Chat Button -->
+    <button id="chatWidgetButton" class="chat-widget-button" aria-label="Open chat">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <!-- Notification Badge (for future use) -->
+        <span id="notificationBadge" class="notification-badge" style="display: none;">0</span>
+    </button>
+
+    <!-- Widget Container -->
+    <div id="widgetContainer" class="widget-container">
+        <!-- Widget Header -->
+        <div class="widget-header">
+            <div class="widget-title">
+                <div class="widget-avatar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="widget-title-text">
+                    <h2>Yuanyuan Li</h2>
+                    <p class="widget-subtitle">Professional Profile</p>
+                </div>
+            </div>
+            <div class="widget-controls">
+                <button id="sidebarToggle" class="widget-control-btn" aria-label="Toggle sidebar" title="Show info">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="12" cy="5" r="1"></circle>
+                        <circle cx="12" cy="19" r="1"></circle>
+                    </svg>
+                </button>
+                <button id="themeToggle" class="widget-control-btn" aria-label="Toggle theme" title="Toggle theme">
+                    <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+                <button id="newChatButton" class="widget-control-btn" aria-label="New chat" title="New chat">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
+                <button id="closeWidgetButton" class="widget-control-btn widget-close-btn" aria-label="Close chat" title="Close">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Widget Content -->
+        <div class="widget-main">
+            <!-- Collapsible Sidebar -->
+            <aside id="widgetSidebar" class="widget-sidebar">
+
+                <!-- Suggested Questions -->
+                <div class="sidebar-section">
+                    <details class="suggested-collapsible" open>
+                        <summary class="suggested-header">Try asking:</summary>
+                        <div class="suggested-items">
+                            <button class="suggested-item" data-question="Tell me about yourself">Tell me about yourself</button>
+                            <button class="suggested-item" data-question="What data systems have you built?">Data systems built</button>
+                            <button class="suggested-item" data-question="What's your experience with AWS?">AWS experience</button>
+                            <button class="suggested-item" data-question="Describe your leadership style">Leadership style</button>
+                            <button class="suggested-item" data-question="What projects did you work on at Two Sigma?">Two Sigma projects</button>
+                        </div>
+                    </details>
+                </div>
+            </aside>
+
+            <!-- Chat Area -->
+            <div class="widget-chat">
+                <div id="chatMessages" class="chat-messages"></div>
+                <div class="chat-input-container">
+                    <input
+                        type="text"
+                        id="chatInput"
+                        placeholder="Ask about Yuanyuan's background..."
+                        autocomplete="off"
+                    >
+                    <button id="sendButton" aria-label="Send message">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="widget.js"></script>
+</body>
+</html>

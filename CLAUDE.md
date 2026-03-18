@@ -173,7 +173,7 @@ This is a Retrieval-Augmented Generation (RAG) system for Yuanyuan Li's personal
 - Single-page application with vanilla JavaScript
 - Real-time profile statistics display
 - Markdown rendering support for AI responses
-- Responsive design with sidebar for profile overview and suggested queries
+- Responsive design with sidebar for suggested queries
 - Dark/light theme toggle
 
 ## Development Notes
