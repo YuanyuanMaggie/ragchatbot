@@ -111,7 +111,7 @@ Outputs:
 
   ApiKeyId:
     Description: API Key ID (run 'aws apigateway get-api-key --api-key <this-id> --include-value' to get the key)
-    Value: !GetAtt ChatbotApiApiKey.ApiKeyId
+    Value: !Ref ChatbotApiApiKey
     Export:
       Name: !Sub '${AWS::StackName}-api-key-id'
 

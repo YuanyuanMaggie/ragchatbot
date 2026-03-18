@@ -5,6 +5,7 @@ A personal assistant powered by RAG (Retrieval-Augmented Generation) that answer
 ## 🎯 What This Does
 
 This chatbot can answer questions like:
+
 - "Tell me about yourself"
 - "What data systems have you built?"
 - "What's your experience with AWS?"
@@ -27,12 +28,13 @@ It provides accurate, grounded responses with proper source attribution.
 The system loads one comprehensive profile document into Claude's context:
 
 **yuanyuan_li_profile.json** (37KB, ~1,500 tokens)
-   - Structured profile data: roles, projects, skills, education
-   - Narrative content: tell-me-about-yourself, career arc
-   - Domain expertise and project themes
-   - Leadership and working style
-   - 3 work experience entries (Two Sigma, Jet.com, SupplyHouse)
-   - 11 key projects with metadata
+
+- Structured profile data: roles, projects, skills, education
+- Narrative content: tell-me-about-yourself, career arc
+- Domain expertise and project themes
+- Leadership and working style
+- 3 work experience entries (Two Sigma, Jet.com, SupplyHouse)
+- 11 key projects with metadata
 
 **Full profile loaded in memory** - No vector database needed! Claude sees 100% of context every time.
 
@@ -47,6 +49,7 @@ The system loads one comprehensive profile document into Claude's context:
 ### 2. Set API Key
 
 Create `.env` file in project root:
+
 ```bash
 ANTHROPIC_API_KEY=your_anthropic_api_key_here
 ```
@@ -69,26 +72,31 @@ The API will be available at: http://localhost:8000
 Try these queries to test the system:
 
 ### Basic
+
 - "Tell me about yourself"
 - "Give me a short professional bio"
 - "What is your background?"
 
 ### Technical
+
 - "What data systems have you built?"
 - "What's your experience with AWS?"
 - "What programming languages do you know?"
 
 ### Projects
+
 - "Tell me about the Factor API project"
 - "What projects did you work on in 2024?"
 - "Show me your analytics API work"
 
 ### Leadership
+
 - "What is your leadership style?"
 - "How do you build and mentor teams?"
 - "Describe your management experience"
 
 ### Unique Strengths
+
 - "What makes you different from typical data engineering managers?"
 - "What's unique about your background?"
 
@@ -109,6 +117,7 @@ FastAPI API Endpoints
 ```
 
 **Why No ChromaDB?**
+
 - Profile is only 37KB (~1,500 tokens)
 - Claude's context window is 200,000 tokens
 - Full profile fits easily → no vector search needed
@@ -117,12 +126,14 @@ FastAPI API Endpoints
 ## 🔧 Technology Stack
 
 **Backend:**
+
 - FastAPI - Web framework
 - Anthropic Claude - AI model (Sonnet 4)
 - Python 3.13+
 - Mangum - Lambda ASGI adapter
 
 **Infrastructure:**
+
 - uv - Package manager
 - Uvicorn - ASGI server (local)
 - AWS Lambda + API Gateway (production)
@@ -163,21 +174,25 @@ ragchatbot-codebase-main/
 ## 🧑‍💻 Development
 
 ### Install Dependencies
+
 ```bash
 uv sync
 ```
 
 ### Run Tests (when available)
+
 ```bash
 uv run pytest
 ```
 
 ### Format Code
+
 ```bash
 ./scripts/format.sh
 ```
 
 ### Lint Code
+
 ```bash
 ./scripts/lint.sh
 ```
@@ -205,17 +220,20 @@ uv run pytest
 ## ❓ Troubleshooting
 
 ### Server Won't Start
+
 - `uv` not in PATH → Install: `curl -LsSf https://astral.sh/uv/install.sh | sh`
 - Port 8000 in use → Kill process: `lsof -ti:8000 | xargs kill`
 - API key missing → Create `.env` file with `ANTHROPIC_API_KEY`
 - Dependencies missing → Run `uv sync`
 
 ### Profile Not Loading
+
 - Verify `yuanyuan_li_profile.json` exists in root directory
 - Check JSON syntax is valid
 - Look for errors in server startup logs
 
 ### Lambda Deployment Issues
+
 - Build fails → Check Python 3.13 installed
 - Deploy fails → Verify AWS credentials configured
 - API errors → Check CloudWatch logs: `sam logs --stack-name yuanyuan-chatbot --tail`
@@ -227,12 +245,14 @@ uv run pytest
 Deploy to AWS Lambda with API Gateway for a serverless, cost-effective solution.
 
 **Benefits:**
+
 - **Cost**: ~$3.65/month with free tier protection
 - **Scalability**: Auto-scales with traffic
 - **No server management**: Fully managed by AWS
 - **Fast**: 2-3 second cold starts
 
 #### Prerequisites
+
 - AWS account with CLI configured
 - AWS SAM CLI installed: `brew install aws-sam-cli`
 - Anthropic API key
@@ -248,16 +268,19 @@ export ANTHROPIC_API_KEY="your-key-here"
 sam deploy \
   --stack-name yuanyuan-chatbot \
   --region us-east-1 \
+  --s3-bucket yuanyuan-chatbot \
   --capabilities CAPABILITY_IAM \
   --parameter-overrides "AnthropicApiKey=$ANTHROPIC_API_KEY"
 
 # 3. Get API credentials
 aws cloudformation describe-stacks \
   --stack-name yuanyuan-chatbot \
+  --region us-east-1 \
   --query 'Stacks[0].Outputs'
 ```
 
 #### Cost Protection
+
 - **Hard limit**: 900,000 requests/month (under free tier)
 - **Throttle**: 10 requests/second
 - **Reserved concurrency**: 10 executions max
@@ -266,11 +289,13 @@ aws cloudformation describe-stacks \
 ### Alternative Deployment Options
 
 **AWS Lightsail** (~$7/month):
+
 - Fixed pricing, simpler setup
 - Good for consistent low traffic
 - Includes SSL, static IP
 
 **Traditional Server**:
+
 - Use Docker container from Dockerfile
 - Deploy to any VPS or cloud platform
 - Configure reverse proxy (nginx/caddy)
@@ -278,6 +303,7 @@ aws cloudformation describe-stacks \
 ## 📈 Future Enhancements
 
 Potential improvements:
+
 - [ ] Add more profile documents (resume, reviews, presentations)
 - [ ] Implement unit and integration tests
 - [ ] Add conversation modes (recruiter, technical, executive)
@@ -289,6 +315,7 @@ Potential improvements:
 ## 🤝 Contributing
 
 This is a personal project, but suggestions are welcome:
+
 1. Open an issue for bugs or feature requests
 2. Submit PRs for improvements
 3. Follow existing code style
