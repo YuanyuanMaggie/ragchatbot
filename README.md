@@ -57,9 +57,7 @@ ANTHROPIC_API_KEY=your_anthropic_api_key_here
 ./run.sh
 ```
 
-### 4. Open Browser
-
-Navigate to: http://localhost:8000
+The API will be available at: http://localhost:8000
 
 ## 📖 Documentation
 
@@ -107,7 +105,7 @@ Claude receives full profile in system prompt
          ↓
 AI Generator (Claude with complete context)
          ↓
-FastAPI → Frontend/Widget
+FastAPI API Endpoints
 ```
 
 **Why No ChromaDB?**
@@ -123,12 +121,6 @@ FastAPI → Frontend/Widget
 - Anthropic Claude - AI model (Sonnet 4)
 - Python 3.13+
 - Mangum - Lambda ASGI adapter
-
-**Frontend:**
-- Vanilla JavaScript
-- Marked.js - Markdown rendering
-- Modern CSS with dark/light themes
-- Responsive widget design
 
 **Infrastructure:**
 - uv - Package manager
@@ -148,34 +140,11 @@ ragchatbot-codebase-main/
 │   ├── ai_generator.py                 # Claude API integration
 │   ├── models.py                       # Data models
 │   └── ...
-├── frontend/
-│   ├── index.html                      # Main UI
-│   ├── script.js                       # Frontend logic
-│   └── style.css                       # Styling
 ├── yuanyuan_li_profile.json            # Comprehensive profile (combines narrative + structured data)
 ├── .env                                # API keys (not in repo)
 ├── run.sh                              # Startup script
-└── README_PROFILE.md                   # This file
+└── README.md                           # This file
 ```
-
-## 🎨 UI Features
-
-### Full-Page Version (index.html)
-- **Dark/Light Theme**: Toggle with button or Ctrl+Shift+T
-- **Profile Overview**: Sidebar with section counts and highlights
-- **Suggested Queries**: Click to quickly ask common questions
-- **Source Attribution**: Collapsible sources with company/timeframe context
-- **Conversation History**: Multi-turn conversations
-- **New Chat**: Start fresh conversation anytime
-- **Markdown Support**: Formatted responses with lists, bold, code
-
-### Embeddable Widget (widget.html)
-- **Floating Button**: Bottom-right corner chat icon
-- **Expandable**: Opens to 420×650px chat interface
-- **Responsive**: Full-screen on mobile
-- **Collapsible Sidebar**: Profile stats and suggestions
-- **Theme Toggle**: Matches your website's style
-- **Embed Anywhere**: Iframe or direct HTML integration
 
 ## 🔒 Privacy & Safety
 
@@ -251,11 +220,6 @@ uv run pytest
 - Deploy fails → Verify AWS credentials configured
 - API errors → Check CloudWatch logs: `sam logs --stack-name yuanyuan-chatbot --tail`
 
-### Widget Not Working
-- API calls fail → Verify API URL and key are correct in widget.js
-- CORS errors → Check API Gateway CORS settings include your domain
-- 403 Forbidden → Ensure `x-api-key` header is set in all fetch calls
-
 ## 🚀 Production Deployment
 
 ### AWS Lambda Deployment (Recommended)
@@ -298,17 +262,6 @@ aws cloudformation describe-stacks \
 - **Throttle**: 10 requests/second
 - **Reserved concurrency**: 10 executions max
 - **Budget alerts**: Email notifications at $5 threshold
-
-#### Update Widget
-After deployment, update `frontend/widget.js` with:
-1. API URL from CloudFormation outputs
-2. API Key (get with `aws apigateway get-api-key --api-key <id> --include-value`)
-3. Add `x-api-key` header to all fetch calls
-
-#### Deploy Widget to S3
-```bash
-./deploy-widget-to-s3.sh yuanyuanli.com https://your-api-url
-```
 
 ### Alternative Deployment Options
 

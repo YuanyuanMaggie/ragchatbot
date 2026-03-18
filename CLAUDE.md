@@ -150,7 +150,7 @@ This is a simplified RAG system for Yuanyuan Li's personal profile. The entire p
 3. Full profile text is passed to Claude in system prompt
 4. User queries are sent directly to Claude with complete context
 5. Claude generates responses using full profile knowledge
-6. Frontend displays responses with source attribution
+6. API returns responses with source attribution
 
 ### Key Configuration (backend/config.py)
 - Profile path: ../yuanyuan_li_profile.json
@@ -158,26 +158,15 @@ This is a simplified RAG system for Yuanyuan Li's personal profile. The entire p
 - Conversation history: 2 message pairs
 - Lambda memory: 512MB (production)
 
-### Frontend Architecture
-- Single-page application with vanilla JavaScript
-- Embeddable widget version for external websites
-- Real-time profile statistics display
-- Markdown rendering support for AI responses
-- Responsive design with collapsible sidebar
-- Dark/light theme toggle
-- Floating chat button (widget mode)
-
 ## Development Notes
 
 - The system automatically loads yuanyuan_li_profile.json on startup
 - Full profile is loaded into memory (~7KB text, 1,500 tokens)
-- FastAPI serves both API endpoints (/api/*) and static frontend files
+- FastAPI serves API endpoints (/api/*)
 - CORS is configured for development
-- No-cache headers are set for static files during development
 - Profile data includes: roles, projects, skills, education, canonical story
 
 ## Deployment
 
 - **Local**: `uv run uvicorn backend.app:app --reload --port 8000`
 - **Lambda**: `sam build && sam deploy` (uses template.yaml)
-- **Widget**: Deploy to S3 with `./deploy-widget-to-s3.sh`
